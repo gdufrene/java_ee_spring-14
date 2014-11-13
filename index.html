@@ -17,8 +17,8 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Java ee spring-14</h1>
-        <p>Java EE - Spring - Cours master e-services</p>
+        <h1>Java EE / Spring</h1>
+        <p>Master e-services 2014</p>
         <p class="view"><a href="https://github.com/gdufrene/java_ee_spring-14">View the Project on GitHub <small>gdufrene/java_ee_spring-14</small></a></p>
         <ul>
           <li><a href="https://github.com/gdufrene/java_ee_spring-14/zipball/master">Download <strong>ZIP File</strong></a></li>
@@ -27,38 +27,241 @@
         </ul>
       </header>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h2>
+<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Introduction.</h2>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>
+  Cette page regroupe les notes de cours et les ressources n&eacute;cessaires au module Java EE / Spring.
+  Le module est constitué d'une séance d'introduction au outils, suivi de 5 séances de travail sur certaines fonctionnalités apportées par la version "Entreprise" de Java et sur Spring. Le plan de cours est donc le suivant :
+</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<ul>
+  <li>Java 8, Maven, Eclipse</li>
+  <li>Servlet et JSP</li>
+  <li>War et Contexte Web</li>
+  <li>Persistance avec JPA</li>
+  <li>Spring: contexte et web-mvc</li>
+  <li>Mini-Projet</li>
+</ul>
+
+<p>
+  Lien vers le slideware d'<a href="introduction.html">introduction au cours</a>.
+</p>
+
+<h2>
+<a name="tools" class="anchor" href="#tools"><span class="octicon octicon-link"></span></a>
+Les outils
+</h2>
+
+<h3>Java 1.8</h3>
+
+<p>
+  Nous allons tout d'abords installer un JDK java 1.8 si ce n'est pas déjà fait.
+  Il faudra déterminer quel est l'architecture de notre poste de travail.
+  Windows, Linux, Mac OS ?
+  Système 32 bits ou 64 bits ?
+</p>
+
+<pre><code>$ uname -a
+<b style="color: #F0F0C0">Darwin</b> webpulser-mbp.local <b style="color: #F0F0C0">11.4.2</b> Darwin Kernel Version 11.4.2: Thu Aug 23 16:25:48 
+PDT 2012; root:xnu-1699.32.7~1/RELEASE_X86_64 <b style="color: #F0F0C0">x86_64</b>
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>
+  Dans mon cas un mac équipé d'un processeur intel (x86) et 64 bits. La version 11.4.2 du noyau me permet de dire, après une petite recherche, qu'il s'agit de Mac OS X Lion. "A propos de ce mac" aurait aussi pu m'aider. Sous windows appuyer sur [Win]+[Pause] pour ouvrir les propriétés du poste de travail.
+</p>
+
+<p>
+  Vérifions si java est déjà installé.
+</p>
+
+<pre><code>$ java -version
+java version "1.7.0_25"
+Java(TM) SE Runtime Environment (build 1.7.0_25-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 23.25-b01, mixed mode)
+</code></pre>
+
+<p>
+  Ceci indiquerait que la version 1.7 est installé, mais nous aimerions une version 1.8.
+  Rendez-vous sur <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE Development Kit 8 Downloads</a> chez Oracle. Téléchargez et installez l'archive. Il faudra idéalement ajouter le chemin des binaires java dans le "PATH" du système. <a href="https://www.java.com/fr/download/help/path.xml">Modifiez le PATH</a>. Sous OSX, je vous recommande d'installer <a href="http://brew.sh/">Homebrew</a> qui pourra sans doute vous aider. Imaginons que j'utilise linux et que j'ai décompressé l'archive dans /opt, cela a du créer un répertoire jdk1.8.0_11.
+</p>
+
+  <pre><code>$ echo 'export $PATH="/opt/jdk1.8.0_11/bin:$PATH"' >> ~/.bashrc
+$ . ~/.bashrc
+</code></pre>
+
+<p>
+  Sous mac l'installation du package va se faire dans '/Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/Contents/Home/'. Le fichier à modifier pour le PATH est '.bash_profile' dans le HOME.
+</p>
+
+<pre><code>$ echo 'export $PATH="/Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/Contents/Home/bin:$PATH"' >> ~/.bash_profile
+$ . ~/.bash_profile
+</code></pre>
+
+<p>Voilà notre premier outil installé. Téléchargez <a href="files/TestJava.java">ce fichier source</a>, compilons et exécutons.</p>
+<p>
+  Le fichier source contient quelques nouveautés introduites dans Java 8 telles que les "lamda expressions", la nouvelle API Java Time pour manipuler les Dates, le "StringJoiner", les Streams. Cela ne compilera donc que si vous avez correctement installé le JDK8.
+</p>
+
+<div class="note">
+  <h5>Tester votre installation Java 1.8</h5>
+  Télécharger ce <a href="http://eservices.webpulser.com/check.jar">fichier check.jar</a>.<br/>
+  Exécuter ce jar et mettre en paramètre "init" suivi de votre prénom et votre nom.<br/>
+  exemple :
+  <code>
+    java -jar check.jar init "Guillaume" "Dufrêne"
+  </code>
+</div>
+
+
+<p>
+  <b style="color: red">Attention</b> : l'exécution de "check init" a créé un fichier ".myKeyFile" dans votre répertoire home qui est confidentiel et vous permettra de valider les exercices suivants. Conservez le en copie quelquepart !<br/>
+  Si vous utilisez un autre ordinateur par la suite, vous devez remettre ce fichier dans votre répertoire "home".<br/>
+  Le jar "check.jar" utilise le proxy de l'universtité par défaut. Si vous souhaitez en dehors de la fac, ajouter l'option "-DNoProxy" avant l'option "-jar".
+</p>
 
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="Maven" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+Maven
+</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>
+Maven est un outil permettant de gérer les dépendances, la compilation, le "packaging" et bien d'autres choses ... Il s'utilise au moyen de fichier "pom" décrivant votre projet.<br/>
+Maven est développé en Java et le script "mvn" utilise la variable d'environement "JAVA_HOME" pour déterminer quelle version de java doit être utilisée. Afin d'éviter tout soucis, initialiser cette variable dans votre ".bashrc" (linux) ou ".bash_profile" (mac) ou dans les propriétés systèmes sous windows.<br/>
+<code>export JAVA_HOME="/path/to/your/java/Home"</code>
+</p>
+
+<p>
+  Page de téléchargement de maven : <a href="http://maven.apache.org/download.cgi">maven.apache.org/download.html</a><br/>
+  <a href="http://mir2.ovh.net/ftp.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz">Archive maven 3.2.3</a> à extraire. Ajouter le répertoire bin à votre PATH, puis vérifier en tapant <i>mvn -v</i> ; vous devriez obtenir quelquechose de ce type :
+</p>
+
+<pre><code>
+Apache Maven 3.2.3 (33f8c3e1027c3ddde99d3cdebad2656a31e8fdf4; 2014-08-11T22:58:10+02:00)
+Maven home: /Users/guillaume/install/apache-maven-3.2.3
+Java version: 1.8.0_11, vendor: Oracle Corporation
+Java home: /Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/Contents/Home/jre
+Default locale: fr_FR, platform encoding: UTF-8
+OS name: "mac os x", version: "10.7.5", arch: "x86_64", family: "mac"
+</code></pre>
+
+<div class="note">
+  <h5>Tester votre installation Maven 3.2.3</h5>
+  Exécuter le jar "check.jar" et mettre en paramètre "check-mvn".<br/>
+  <code>
+    java -jar check.jar check-mvn
+  </code>
+</div>
+
+<p>
+  Le principal intérêt de maven est de gérer des dépendances vers des librairies. Ces librairies sont téléchargées depuis un "repository", généralement le repository "central" maven.<br/>
+  A l'université, les connexions sur le web doivent passées par le proxy cache. Pour que maven utilise le proxy, il faut modifier le fichier "settings.xml"
+  situé dans votre 'HOME', dans le répertoire '.m2'<br/>
+  Ce répertoire contiendra également toutes les librairies téléchargées (dans 'repository') par maven au fur et à mesure de son utilisation. Il est possible que ce répertoire devienne assez lourd avec le temps ...
+</p>
+
+<p>contenu du fichier settings.xml pour la configuration proxy</p>
+
+<pre><code>
+&lt;settings&gt;
+  &lt;proxies&gt;
+   &lt;proxy&gt;
+      &lt;active&gt;true&lt;/active&gt;
+      &lt;protocol&gt;http&lt;/protocol&gt;
+      &lt;host&gt;cache-etu.univ-lille1.fr&lt;/host&gt;
+      &lt;port&gt;3128&lt;/port&gt;
+      &lt;username&gt;&lt;/username&gt;
+      &lt;password&gt;&lt;/password&gt;
+      &lt;nonProxyHosts&gt;localhost|127.0.0.1&lt;/nonProxyHosts&gt;
+    &lt;/proxy&gt;
+  &lt;/proxies&gt;
+&lt;/settings&gt;
+</code></pre>
+
+<p>
+  Lorsque vous n'êtes pas sur le réseau de l'université pensez à désactiver le proxy ! : &lt;active&gt;<b>false</b>&lt;/active&gt;
+</p>
+
+<p>Voilà votre 2ème outil installé.<p>
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<a name="ide" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+IDE
+</h3>
+  
+<p>
+Je vous recommande d'utiliser un IDE (Integrated Development Environment) du type :
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<div>
+  <div style="width: 50%; text-align: center; float: left">
+    <a href="https://netbeans.org/downloads/">
+      <img src="https://netbeans.org/images_www/v7/design/logo_netbeans_red.png" /><br/>
+      netbeans
+    </a>
+  </div>
+  <div style="width: 50%; text-align: center; float: left">
+    <a href="https://www.eclipse.org/downloads/">
+      <img src="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-800x188.png" width="200" height="47" /><br/>
+      eclipse
+    </a>
+  </div>
+</div>
+
+<p>
+Je ne vous recommande pas l'utilisation de plugins du type "maven pour eclipse" ou encore "WTP", selon moi c'est du gaspillage de ressource mémoire et potentiellement du temps perdu en plantage divers et varié. Idem si vous choisissez netbeans, la version "Java SE" devrait être suffisante.<br/>
+Je n'assure pas de support sur netbeans ou eclipse avec les plugins maven et/ou WTP, vous êtes prévenu.
+</p>
 
 <h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<a name="ide" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+Autres 'outils' intéressants
+</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>
+  Un développeur se doit de maitriser quelques outils 'système' de base afin de faciliter son travail.<br/>
+  Avez-vous entendu parler du mouvement "<a href="http://fr.wikipedia.org/wiki/Devops">devops</a>" ?<br/>
+  Il me semble essentiel de vous familiariser à l'usage des commandes 'wget' et 'curl' qui sont extrêmement pratique pour télécharger des archives (ou toutes sortes de choses), et permet d'exécuter différents type de requêtes HTTP (utile en développement web).
+</p>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<p>
+  Bash peut être configuré pour utiliser le proxy de l'université et permettre à wget / curl de fonctionner correctement.<br/>
+  Il faut ajouter quelques variables d'environnement à votre <i>.bashrc</i> ou votre <i>.bash_profile</i>.
+</p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
+<pre><code>
+export http_proxy=http://cache-etu.univ-lille1.fr:3128
+export https_proxy=https://cache-etu.univ-lille1.fr:3128
+export no_proxy=localhost,127.0.0.0/8,*.local
+</code></pre>
+
+<p>
+  <code>curl</code> est une commande permettant d'afficher le corps HTML d'une réponse d'un serveur web à une url. Cette commande permet également d'envoyer des données en POST ou en GET.
+</p>
+
+<p>
+  <code>wget</code> est une commande permettant de télécharger dans un fichier le "contenu" indiqué par une url. Cela peut être une page web, ou tout autre fichier.
+</p>
+
+<p>
+  Vous devriez prendre un peu de temps pour lire les pages "man" de ces deux commandes très utile lorsque l'on fait du développement web.
+</p>
+
+<p>
+  <a href="https://addons.mozilla.org/fr/firefox/addon/firebug/">
+    <img src="http://www.nosyweb.fr/images/stories/article/outils/firebug_firefox.png" height="50" style="float: left; margin-right: 10px"> Firebug</a> est un plugin pour firefox fort pratique que vous devriez installer. Il permet de visualiser la structure HTML d'une page, de debuger du javascript, d'analyse les échanges réseaux, les cookies et bien d'autres choses ...
+</p>
+
+<ul class="navigation">
+  <li></li>
+  <li>
+    <a href="index.html"><strong>Sommaire</strong></a>
+  </li>
+  <li>
+    <a href="servlet.html"><strong>Servlet - JSP</strong></a>
+  </li>
+</ul>
+
+</section>
     </div>
     <footer>
       <p>Project maintained by <a href="https://github.com/gdufrene">gdufrene</a></p>

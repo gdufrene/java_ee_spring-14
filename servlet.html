@@ -1,0 +1,279 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Java ee spring-14 by gdufrene</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Java EE / Spring</h1>
+        <p>Master e-services 2014</p>
+        <p class="view"><a href="https://github.com/gdufrene/java_ee_spring-14">View the Project on GitHub <small>gdufrene/java_ee_spring-14</small></a></p>
+        <ul>
+          <li><a href="https://github.com/gdufrene/java_ee_spring-14/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/gdufrene/java_ee_spring-14/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/gdufrene/java_ee_spring-14">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        
+        <h2><a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Servlet - JSP.</h2>
+
+<p>
+Une servlet est un objet java qui étends l'interface "Servlet" ou "HTTPServlet".<br/>
+Cette interface définie 2 méthodes qui sont appelées lorsque le code est chargé/arrêté par le serveur web qui "expose" ces servlets à travers une URL.<br/>
+Ces méthodes "init" et "destroy" permettent d'initialiser un certain nombre d'élément au lancement de la servlet ou de nettoyer le contexte lors de leur arrêt.<br/>
+</p>
+
+<p>
+Le serveur web va interpréter une partie de la requête HTTP envoyée par le navigateur de l'internaute et appelée une méthode de la servlet qui est responsable du traitement de cette requête.<br/>
+</p>
+
+<center><img src="http://static.commentcamarche.net/www.commentcamarche.net/pictures/servlets-images-moteur.gif" /><br/>
+  (source : "comment çà marche")
+</center>
+
+<p>
+  C'est la méthode "service" qui est appelée.<br/>
+  Cette méthode possède une implémentation par défaut dans la classe abstraite "<a href="https://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServlet.html">HTTPServlet</a>". Elle appelle la méthode doGet, doPost, doHead, doOptions, doPut, doTrace en fonction du type de requête HTTP lancée au serveur.<br/>
+</p>
+
+<p>
+  Les deux paramètres de ces opérations sont "<a href="https://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServletRequest.html">HTTPServletRequest</a>" et "<a href="https://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServletResponse.html">HTTPServletResponse</a>".<br/>
+  Ils permettent respectivement d'analyser la requête réalisée par l'internaute, et de lui répondre.<br/>
+</p>
+
+
+<h2><a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Votre première servlet.</h2>
+
+<p>
+  Nous allons réaliser une première servlet très simple en essayant de "tout faire à la main".<br/>
+  Depuis l'écriture dans un éditeur de texte basique, la compilation et le lancement dans un serveur web de type "tomcat 8" allégé.
+<p>
+
+<p>
+  <ul><li>
+    Télécharger <a href="http://eservices.webpulser.com/tomcat8.zip">cette archive</a> de tomcat préparée et l'extraire.
+  </li><li>
+    Rendez vous dans le dossier tomcat8/webapps/tp1/WEB-INF/classes
+  </li><li>
+    Créez un ficher "Circonference.java"
+  </li></ul>
+</p>
+
+<code><pre>
+  package fr.eservice.servlet;
+
+  import java.io.IOException;
+
+  import javax.servlet.ServletException;
+  import javax.servlet.annotation.WebServlet;
+  import javax.servlet.http.HttpServlet;
+  import javax.servlet.http.HttpServletRequest;
+  import javax.servlet.http.HttpServletResponse;
+
+  @WebServlet("/circ")
+  public class Circonference extends HttpServlet {
+  	private static final long serialVersionUID = 1L;
+
+    @Override
+  	protected void service( HttpServletRequest req, HttpServletResponse resp ) 
+  		throws ServletException, IOException {
+  		resp.setCharacterEncoding("UTF-8");
+
+  		// TODO: get parameter "rayon" from request ***************
+  		String rayon = null;
+  		
+  		if ( rayon == null || rayon.isEmpty() ) {
+  			resp.setContentType("text/plain");
+  			resp.getWriter().write( 
+  				req.getRequestURI() + " Utilisation:\n" +
+  				"\thttp://" + req.getServerName() + ":" + req.getServerPort() + req.getRequestURI() + "?rayon=X\n" +
+  				"\tretourne la circonférence d'un cercle dont le rayon est donné.\n" +
+  				"\trayon: un nombre flottant\n"
+  			);
+  			return;
+  		}
+
+  		double d;
+  		try {
+  			d = Double.parseDouble(rayon);
+  		} catch( NumberFormatException exp ) {
+  			resp.setContentType("text/plain");
+  			resp.getWriter().write( "Le rayon indiqué ["+rayon+"] ne peut pas être lu.\n" );
+  			return;
+  		}
+
+  		resp.setContentType("application/json");
+  		
+  		// TODO: compute circumference ***************
+  		double circ = 0.0;
+  		
+  		resp.getWriter().write( "circ=" + circ );
+  	}
+  }
+</pre></code>
+
+<h3>Compilation</h3>
+
+<p>
+  Pour compiler ce code il faudra avoir le répertoire $JAVA_HOME/bin dans votre PATH (voir installation des outils). Il faut en effet pouvoir exécuter le compilateur "javac" facilement.<br/>
+  Il sera également nécessaire de mettre la librairie "servlet-api.jar" dans votre CLASSPATH. C'est cette librairie qui contient toutes les interfaces et classes abstraites que nous implémentons en faisant des servlets.<br/>
+  Cette librairie est fournie (entre autre) avec tomcat, dans le répertoire "lib".<br/>
+</p>
+
+<p>
+  <code>javac -cp (chemin vers tomcat)/lib/servlet-api.jar Circonference.java</code> <br/>
+  Cela a du créer un fichier "Circonference.class" qui est notre servlet, branchée sur l'url "/circ" du contexte "/tp1".<br/>
+</p>
+
+<h3>Déploiement</h3>
+
+<p>
+  Lançons notre serveur web.<br/>
+  rendez-vous dans le répertoire tomcat8/bin et exécutez <code>./catalina.sh run</code><br/>
+  Après quelques secondes votre serveur est lancé et accessible sur "http://localhost:8080"<br/>
+</p>
+
+<p>
+  Utilisons la commande curl pour interroger votre servlet<br/>
+  <code>curl http://localhost:8080/tp1/circ</code><br/>
+  résultat attendu :
+</p>
+
+<code><pre>
+/tp1/circ Utilisation:
+	http://eservices.webpulser.com:8080/tp1/circ?rayon=X
+	retourne la circonférence d'un cercle dont le rayon est donné.
+	rayon: un nombre flottant
+</pre></code>
+
+<p>
+  Pour le moment, si vous essayez de passer le rayon en paramètre de la requête, cela n'est pas pris en compte.<br/>
+  Corrigez votre Servlet pour utiliser le paramètre "rayon" et renvoyer le bon résultat.<br/>
+</p>
+
+<p>
+  Pour le moment nous exécutons une requête HTTP de type "GET", il est possible de réaliser un "POST" avec curl, de manière similaire à ce que ferait un formulaire html (&lt;form&gt;).<br/>
+  Utilisons curl et affichons la requête HTTP générée.<br/>
+  <code>curl --trace-ascii - -d rayon=15.23 localhost:8080/circ</code>
+</p>
+
+<div class="note">
+  <h5>Tester votre servlet</h5>
+  Exécuter le jar "check.jar" et mettre en paramètre "check-circ".<br/>
+  <code>
+    java -jar check.jar check-circ
+  </code>
+</div>
+
+<h2>introduction aux JSP</h2>
+
+<p>
+Jsp est un équivalent java des fichiers asp ou php. C'est une manière de mettre du java, exécuté coté serveur, dans une page html. Le jsp n'est pas interprété, il est en fait traduit en java puis compilé (généralement au premier appel de la page), et ensuite exécuté. C'est le résultat de cette exécution qui donne le code html renvoyé au navigateur.
+</p>
+
+<p>
+Nous utiliserons "jasper" comme implémentation du moteur de jsp, il est fourni avec tomcat.
+</p>
+
+<h3>Quelques bases</h3>
+
+<p>
+Afin de distinguer le code html ou javascript à donner au navigateur et le code java à éxécuter sur le serveur, nous utilisons les balises "&lt;%" et "%&gt;" pour délimiter le code java. <br/>
+Une balise particulière permet de définir des propriétés sur le type de réponse HTTP, l'encodage de la page, ou encore les imports java nécessaire pour la compilation de la page. Toutes ces directives se retrouvent entre les balises "&lt;%@" et "%&gt;". <br/>
+Enfin, il est très courant de vouloir afficher le contenu d'une variable dans le html qui sera renvoyé au navigateur. Cela peut se faire en faisant un <code>&lt;% out.print( maVariable ); %&gt;</code> mais un tag a été défini pour réduire l'écriture à <code>&lt;%= maVariable %&gt;</code> qui fait exactement la même chose. <br/>
+Comme nous sommes de bon développeurs consciencieux, nous n'hésiterons également pas à utiliser le tag permettant de mettre des commentaires dans nos jsp : <code>&lt;%-- mon super commentaire qui ne sera pas compilé ou envoyé au navigateur --%&gt;</code> <br/>
+Il faut bien comprendre que la jsp va être traduite en code java. Plus précisément en une classe qui hérite de Servlet dont il sera exécuter la méthode "service". Dans certains cas il peut être utile de vouloir introduire des attributs ou des méthodes à cette classe générée et compilée.<br/> 
+Cela peut se faire avec le tag <code>&lt;%! private double montant; %&gt;</code>
+</p>
+
+<p>
+Depuis votre code java, vous pouvez utiliser les variables suivantes :
+<ul><li>  request - qui contient l'objet HttpServletRequest
+</li><li> response - qui contient l'objet HttpServletResponse
+</li><li> out - qui est le flux de sorti équivalent à request.getWriter()
+</li><li> application - un objet possédant notament la méthode "log" utile pour débugger
+</li><li> pageContext - un objet permettant d'échanger des variables entre les différents morceaux de jsp de la page.
+</li></ul>
+</p>
+
+<p>
+Pour rendre l'écriture de nos jsp un peu plus modulaire il est possible d'inclure du code jsp à partir d'une autre page jsp. Cela se fera via la directive &lt;%@ include file="ma_page.jsp" %&gt; Si vous donnez un chemin absolu au fichier (exemple /layout/header.jsp), la racine considéré est celle du contexte web du serveur. Il est ainsi plus facile d'être indépendant de l'environnement de déploiement.
+</p>
+
+<h3>Test</h3>
+
+<p>
+  Reprenez le contenu de <a href="https://raw.githubusercontent.com/gdufrene/java_ee_spring-13/master/102_Jsp/www/index.jsp">ce fichier</a> et mettez le dans un fichier "test.jsp", dans votre répertoire tomcat/webapps/tp1.<br/>
+  Accédez à la page http://localhost:8080/tp1/test.jsp</br>
+  Le premier accès est un peu plus long car "jasper", le moteur jsp, transforme votre source jsp en source java, puis le compile et enfin il exécute ce code.<br/>
+  Pour les appels suivant, le code est simplement exécuté comme n'importe quel autre servlet.<br/>
+  Vous pouvez d'ailleurs regarder le contenu du source java généré dans le répertoire de travail de tomcat : tomcat/work/Catalina/localhost/tp1/org/apache/jsp<br/>
+  Regarder le source peut aider à comprendre une erreur glissée dans la jsp, ou à analyser une exception relevée par le code exécuté.
+</p>
+
+<h3>Exercice de mise en jambe</h3>
+
+<p>
+Ecrire une page présentant un film, permettant aux visiteurs de laisser un commentaire.<br/>
+Les commentaires seront simplement laissés dans une "List" stockée en static dans la servlet.<br/>
+Chaque démarrage (ou re-démarrage) de tomcat entrainera donc la perte des données.<br/>
+</p>
+
+<h2>Git</h2>
+
+<p>
+Git est un logiciel libre de gestion de versions. Il permet de stocker un ensemble de fichiers en conservant la chronologie de toutes les modifications qui ont été effectuées dessus. Il permet notamment de retrouver les différentes versions d'un lot de fichiers connexes. <br/>
+Git a la particularité d'être décentralisé : les sources peuvent être stockées sur différents serveurs, chacun des serveurs pouvant évoluer à leur rythme.<br/>
+Git a été créé par Linus Torvalds, le papa de Linux.
+</p>
+
+<p>
+<ul><li>  Créer un projet sur bitbucket
+</li><li> Cloner ce projet sur votre ordinateur
+</li><li> Ajouter un fichier ".gitignore" pour ne pas envoyer vos fichiers ".class"
+</li><li> Ajouter le reste de vos fichiers
+</li><li> Faîtes un commit
+</li><li> Pousser vos modifications sur bitbucket
+</li></ul>
+</p>
+
+<p>
+  Consultez la <a href="http://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository">documentation</a> en cas de soucis.
+</p>
+
+
+<ul class="navigation">
+  <li>
+    <a href="index.html"> <strong>&laquo; Introduction</strong> </a>
+  </li>
+  <li>
+    <a href="index.html"> <strong>^ Sommaire ^</strong> </a>
+  </li>
+  <li>
+    <a href="#"><strong> (a suivre) </strong></a>
+  </li>
+</ul>
+
+</section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/gdufrene">gdufrene</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
