@@ -1,0 +1,338 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Java ee spring-14 by gdufrene</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Java EE / Spring</h1>
+        <p>Master e-services 2014</p>
+        <p class="view"><a href="https://github.com/gdufrene/java_ee_spring-14">View the Project on GitHub <small>gdufrene/java_ee_spring-14</small></a></p>
+        <ul>
+          <li><a href="https://github.com/gdufrene/java_ee_spring-14/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/gdufrene/java_ee_spring-14/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/gdufrene/java_ee_spring-14">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        
+        <h2><a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Persistance.</h2>
+
+
+<p>
+  Il y a fort longtemps dans une galaxie lointaine ... lorsque l'on souhaitait accéder à une base de données relationnel on utilisait un drivers spécifique pour LA base de données visée et on écrivait du code SQL spécifique (car le SQL n'était pas encore très standardisé). On utilisait également des opérations spécifique du drivers.
+</p>
+
+<h2>JDBC</h2>
+
+<p>
+  Puis est arrivé JDBC ... une abstraction java permettant de standardiser un peu les méthodes qui manipulent ces bases. JDBC est une spécification : des interfaces et des objets disponibles dans le package java.sql.
+</p>
+
+<p>
+  Il reste nécessaire d'avoir le drivers de la base de données compatible JDBC, mais vous devriez être capable de changer de drivers (et donc de base de données) sans avoir à modifier trop de choses dans votre code.
+</p>
+
+<h3>Initialiser une base SQL</h3>
+
+<p>
+  Nous allons tester JDBC avec une base minimaliste nommée "sqlite".<br/>
+  sqlite est fourni avec votre distribution linux, et souvent avec Mac OS x. Sous windows vous pouvez télécharger <a href="http://www.sqlite.org/2014/sqlite-shell-win32-x86-3080701.zip">cette archive</a> contenant une version pré-compilée.<br/> 
+  C'est une base de données relationnelle "classique" qui a au moins trois avantages :
+<ul><li>  c'est simple
+</li><li> c'est efficace
+</li><li> çà "parle" le SQL :)
+</li></ul>
+</p>
+  
+<p>
+  Commençons par créer une table et mettons y quelques données...<br/>
+  Placez-vous dans votre répertoire tomcat/webapps/tp1/WEB-INF<br/>
+  lancez sqlite avec la commande <code>sqlite3 data.db</code>
+</p>
+
+<p>
+  Créez une table "member" avec les colonnes "nom", "prenom", "email", "pwd".<br/>
+  Insérer le membre : Dufrene, Guillaume, <i>-mon email-</i>, test<br/>
+</p>
+
+<code><pre>
+create table member(
+  nom    varchar(80),
+  prenom varchar(80),
+  email  varchar(100),
+  pwd    varchar(45)
+);
+insert into member values( "Dufrene", "Guillaume", "xxEMAILxx", "test");
+</pre></code>
+
+<h3>Connexion et requête d'une base</h3>
+
+<p>
+  A partir de maintenant nous allons séparer les sources java et les classes.<br/>
+  Créez un répertoire "src" dans tomcat/webapps/tp1/WEB-INF<br/>
+  Créer un répertoire "jdbc" dans src<br/>
+  Utilisez cette <a href="files/tp2/ITestJDBC.java">interface</a> et cette <a href="files/tp2/TestJDBC.java">implémentation</a> incomplète comme base de travail<br/>
+  pour récupérer ces sources facilement ... (dans WEB-INF/src/jdbc)
+</p>
+
+<code><pre>
+wget http://gdufrene.github.io/java_ee_spring-14/files/tp2/ITestJDBC.java
+wget http://gdufrene.github.io/java_ee_spring-14/files/tp2/TestJDBC.java
+</pre></code>
+
+<p>
+  Compilons ce petit objet qui se connecte à la base.<br/>
+  En vous plaçant dans "WEB-INF" :<br/>
+  <code>javac -sourcepath src -d classes src/jdbc/TestJDBC.java</code><br/>
+  L'option "sourcepath" permet d'indiquer où trouver les fichiers sources nécessaire à la compilation. L'option "d" indique l'endroit où les fichiers class seront compilés.<br/>
+  Essayons de d'exécuter. Il sera nécessaire de rentre le drivers sqlite-jdbc accessible à l'exécution (dans le classpath)<br/>
+  <code>java -cp lib/sqlite-jdbc-3.8.7.jar:classes jdbc.TestJDBC</code><br/>
+  L'option "cp" permet de spécifiez les endroits ou se trouve les class nécessaire, à la compilation, ou à l'exécution. Il peut contenir des répertoires ou des fichiers jar. Le classpath est séparé par ":" sous linux/mac et par ";" sous windows.<br/>
+  pour le moment vous devriez obtenir :
+</p>
+
+<code><pre>
+Test du mot de passe
+ ==&gt; false
+</pre></code>
+
+<p>
+  Implémentez correctement la classe TestJDBC pour vérifier la correspondance d'un mail et d'un mot de passe.<br/>
+</p>
+
+<div class="note">
+  <h5>Tester votre opération checkPasswordBasic</h5>
+  <b style="color: #ff6666; font-weight: bold">Attention</b> le fichier <a href="http://eservices.webpulser.com/check.jar">check.jar</a> a été mis à jour, pensez à télécharger la nouvelle version (1.1)<br/>
+  Exécutons le check, en mettant dans le classpath votre implémentation de TestJDBC, et la librairie sqlite-jdbc et mettre en paramètre "check-jdbc1".<br/>
+  Cette ligne suppose que "check.jar" soit contenu dans "WEB-INF", adapter la ligne de code si ce n'est pas le cas.<br/>
+  <code>
+    java -cp classes:check.jar:lib/sqlite-jdbc-3.8.7.jar tool.Check check-jdbc1
+  </code>
+</div>
+
+<p>
+  Selon la manière dont vous avez implémenté votre fonction, il est possible de contourner la vérification du mot de passe ou non. Si c'est le cas (dernier test) votre code est sensible à de l'injection SQL.<br/>
+  Que se passe-t-il si je passe la chaîne de caractère <code>' OR '1' = '1</code> dans les deux paramètres email et mot de passe ?<br/>
+  Trouvez un moyen de corriger ce problème.
+</p>
+
+<h3>Améliorons notre code</h3>
+
+<p>
+  Stocker un mot de passe en clair dans une base de données c'est mal !<br/>
+  Cela ne respecte pas la confidentialité et expose vos utilisateurs à un vol potentiel de leur mot de passe.<br/>
+  Une bonne pratique est de réaliser un "Hash" du mot de passe avant de l'insérer en base de données. Lors de la vérification du mot de passe, il faut comparer le hash en base avec le hash du mot de passe proposé.<br/>
+  La fonction de hash "SHA1" peut être utilisée pour ce faire.
+</p>
+
+<p>
+  Selon l'interface ITestJDBC, implémentez les fonction :<br/>
+  &raquo; exists pour vérifier si un utilisateur existe ou non.<br/>
+  &raquo; addMember pour insérer la une nouvelle personne dont le mot de passe sera "hashé" par la fonction SHA1.<br/>
+  &raquo; checkPasswordWithSum qui vérifie le mot de passe d'un utilisateur par la fonction SHA1.<br/>
+  Voici un exemple de code pour obtenir un "SHA1" en java, utilisant <a href="https://docs.oracle.com/javase/8/docs/api/java/security/MessageDigest.html">MessageDigest</a>.
+</p>
+
+<code><pre>
+private static String sha1(String password) {
+  MessageDigest md = null;
+  try {
+      md = MessageDigest.getInstance("SHA-1");
+  } catch(NoSuchAlgorithmException e) {
+      e.printStackTrace();
+      return "*****";
+  } 
+  byte[] sha1sum = md.digest(password.getBytes());
+  StringBuffer sb = new StringBuffer();
+  for( int i = 0; i &lt; sha1sum.length; i++ ) sb.append( String.format("%02x", sha1sum[i]) );
+  return sb.toString();
+}
+</pre></code>
+
+<div class="note">
+  <h5>Tester vos opérations pour la 2e partie</h5>
+  <code>
+    java -cp classes:check.jar:lib/sqlite-jdbc-3.8.7.jar tool.Check check-jdbc2
+  </code>
+</div>
+
+<h3>Mettre à jour votre git</h3>
+
+<p>
+  Il est temps de mettre à jour votre repository de source.<br/>
+  Il n'est pas souhaitable de commiter les fichiers jar, ceux-ci peuvent être retrouvés facilement.<br/>
+  Ecrire une règle dans votre ".gitignore" pour ne pas exclure les fichier .jar ainsi que les fichier .db (base sqlite)<br/>
+  Ajouter le ".gitignore" pour le prochain commit. <code>git add .gitignore</code><br/>
+  Ajouter tous les nouveaux fichiers à votre commit <code>git add .</code><br/>
+  Vérifier le contenu de votre prochain commit <code>git status</code><br/>
+  Enlever éventuellement les fichiers superflues <code>git rm --cached xxFILExx</code><br/>
+  Commitez votre travail et mettez un message pertinent <code>git ci -m "TP2-JDBC"</code>
+  "Poussez" votre travail sur le serveur <code>git push</code>
+</p>
+
+<p>
+  En environnement de travail, avant de pousser ou de commencer à travailler en début de journée il convient généralement de "Tirer" les modifications de code réalisées par vos collègues.<br/>
+  <code>git pull</code><br/>
+  Si des conflits surviennes, visualisé les fichiers en conflit avec git status, modifiez les pour conserver le code nécessaire, puis ajouter les pour un prochain commit qui résoudra le conflit.<br/>
+  lorsque vous avez corrigé et ajouté tous les fichiers en conflit, faite de nouveau un commit et un push.
+</p>
+
+<h3>Configurer eclipse pour travailler efficacement</h3>
+
+<p>
+  Nous allons configurer l'IDE Eclipse pour travailler de manière plus efficace.<br/>
+  Eclipse est un outil vous faciliter la vie, vous devez comprendre son fonctionnement et savoir vous en passer si nécessaire.<br/>
+  <br/>
+  Voici les actions essentielles à savoir pour le cadre de ce TP. <br/>
+  ... (demo)<br/>
+ <ul><li> créer un projet à partir de sources existantes,
+</li><li> configurer la JRE si nécessaire,
+</li><li> ajouter le source folder si nécessaire,
+</li><li> configurer le output directory,
+</li><li> ajouter des dépendances (servlet-api.jar essentiellement)
+</li><li> configurer tomcat pour permettre le debug dans eclipse
+</li><li> configurer eclipse pour débuger une servlet qui tourne dans tomcat
+</li><li> mettre un point d'arrêt, avancer pas à pas, inspecter les variables
+</li><li> déconnecter le mode debug / changer de vue entre "Debug" et "Java"
+</li></ul>
+  ... (/demo)<br/>
+</p>
+
+<h3>Réaliser un écran d'authentification</h3>
+
+<p>
+  Nous allons utiliser les classes écrites à l'instant et les utiliser dans des JSP / Servlet afin
+  de permettre à des membres de s'inscrire ou de s'identifier.<br/>
+  Nous allons utiliser <a href="http://getbootstrap.com/">Bootstrap</a> afin de donner rapidement un style sympa à nos pages.<br/>
+  Il faudra sans doute modifier votre "DAO" TestJDBC pour charger le fichier "data.db" ailleurs que dans le répertoire courant, interprété comme le répertoire dans lequel vous êtes au moment de lancer tomcat. Ce pourrait ne pas etre pratique d'avoir ce fichier dans le "/bin" de tomcat, et ce ne semble pas être une super idée de le laisser dans le "/WEB-INF" de votre contexte.<br/>
+  <i class="icon-star">★</i>
+  Trouver un endroit pertinent pour le mettre et proposez un moyen simple de configurer le chemin où se trouve ce fichier.
+</p>
+
+<p>
+
+<ol><li> Télécharger <a href="files/tp2/login.html">ce fichier</a> html et <a href="files/tp2/signin.css">ce fichier</a> de style. Mettez-les dans à la racine de votre contexte web (webapps/tp1).<br/>
+</li><li> Modifiez le login.html pour en faire une JSP.<br/>
+</li><li> Créez une servlet "AuthControl" branchée sur l'url "/auth" qui vérifiera que le mail et le mot de passe correspondent à un utilisateur.<br/>
+</li><li> Il faudra modifier l'attribut "action" de votre formulaire html pour diriger la requête post vers votre servlet.
+</li><li> Utilisez les paramètre "email" et "password" pour valider ou non l'authentification.<br/>
+</li><li> Si ce c'est bon, on utilisera la méthode "<a href="https://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServletResponse.html#sendRedirect%28java.lang.String%29">sendRedirect</a>" de l'objet HttpServletRequest pour diriger l'utilisateur vers une page de bienvenue.<br/>
+</li><li> Si le login / mot de passe ne correspondent pas, ré-afficher la JSP de login avec un message d'erreur.<br/>
+  On pourra utiliser dans ce cas l'objet RequestDispatcher qui permet de déléguer le traitement d'une requête à une autre servlet (ou une autre JSP).<br/>
+  <code>req.getRequestDispatcher("/login.jsp").forward(req, resp);</code><br/>
+</li><li>Le message d'erreur doit être dans une div dont la classe css est "alert alert-danger" voir <a href="http://getbootstrap.com/components/#alerts">cet extrait</a> de documentation.</br>
+  Pour passer une variable (ou un paramètre java) à votre servlet (le message d'erreur par exemple) vous pouvez utiliser la méthode "<a href="https://docs.oracle.com/javaee/7/api/javax/servlet/ServletRequest.html#setAttribute%28java.lang.String,%20java.lang.Object%29">setAttribute</a>" de l'objet request. Dans votre JSP vous pourrez récupérer cette variable avec la méthode associée "<a href="https://docs.oracle.com/javaee/7/api/javax/servlet/ServletRequest.html#getAttribute%28java.lang.String%29">getAttribute</a>".
+</li><li> lorsqu'une erreur survient on souhaiterait que le champ email conserve le contenu saisi par l'utilisateur lors de l'essai précédant.  
+</li></ol>
+
+  <b style="color: red">Attention</b> : sendRedirect ou forward n'arrête pas le traitement de la méthode java. Si vous souhaitez ne pas continuer le traitement de l'opération vous devez explicitement faire un "return" avec cette opération.
+<p>
+  
+  <img style="float: left; margin: 10px" src="files/tp2/login.png" />
+  <p><i>Exemple de formulaire d'identification.</i></p>
+  <br style="clear: both"/>
+  
+<h3>Formulaire d'inscription</h3>
+
+<p>
+  Selon le même principe Vous allez réaliser un formulaire d'inscription.<br/>
+  Voici les étapes principales<br/>
+  
+<ol><li> Créer une page JSP (register.jsp) pour le formulaire d'inscription.<br/>
+  les champs du formulaire seront nommés : firstname, lastname, email, password.
+</li><li> Créer une servlet ("/signin") qui récupère les paramètres.
+</li><li> vérifier la validité des paramètres dans votre servlet <br/>
+</li><li> Gestion des erreur : ré-afficher le formulaire avec les champs en erreur (class has-error).
+</li><li> Si tout est Ok, enregistrer l'utilisateur et rediriger l'utilisateur vers une page de confirmation.
+</li></ol>
+
+</p>
+
+<img style="float: left; margin: 10px" src="files/tp2/register.png" />
+<p>
+  <i>
+  <br/>
+  Exemple de formulaire d'enregistrement.<br/>
+  Ici, le mail saisi existe déjà, un message d'erreur l'indique et le champ est mis en évidence.<br/>
+  </i>
+</p>
+<br style="clear: both"/>
+
+<div class="note">
+  <h5>Tester votre authentification et inscription</h5>
+  <code>
+    java -cp classes:check.jar:lib/sqlite-jdbc-3.8.7.jar tool.Check check-auth
+  </code>
+</div>
+
+<p>
+  Lorsque vous êtes satisfait du résultat mettre à jour le git.<br/>
+  Indiquez dans votre message de commit "TP2-Auth".
+</p>
+
+<h3>Envoyer des mails avec JavaMail</h3>
+
+<p>( <i style="color: #3333AA">autonomie</i> )</p>
+
+<p>
+  Essayez de mettre en place l'envoie d'un e-mail de confirmation lors de l'inscription d'un membre.<br/>
+  Ce membre devra confirmer son inscription en cliquant sur le lien reçu par email.<br/>
+  Le compte ne sera pas actif tant que le membre n'aura pas cliqué sur le lien, c'est à dire que lorsque le membre essai de s'identifier alors qu'il n'a pas validé son inscription on lui affiche un message d'erreur et on l'invite à valider son email.<br/>
+  Lorsqu'une personne active son compte, envoyez lui un mail de bienvenue et mettre l'administrateur en copie.<br/>
+  Si j'ai oublié mon mot de passe, un lien sur la page d'identification m'amène à un formulaire où je peux renseigner mon adresse email, je reçoit un mail me permettant de mettre un nouveau mot de passe.<br/>
+</p>
+
+<p>
+  Il vous faudra utiliser l'API "<a href="http://java.net/projects/javamail/downloads/download/javax.mail.jar">javamail</a>".<br/>
+  Depuis l'université il vous sera possible d'utiliser le SMTP et votre compte mail "univ-lille1".<br/>
+  N'hésitez pas à consultez la <a href="http://cri.univ-lille1.fr/Services-proposes/messagerie/configuration/SMTP/">documentation du CRI</a> et les <a href="http://www.jmdoudoux.fr/java/dej/chap-javamail.htm">tutoriaux</a> disponibles.<br/>
+</p>
+
+<p>
+  <i class="icon-star">★</i>
+  Lorsque vous avez terminé ce cas d'usage, faîtes valider votre travail lors d'un TP encadré pour valider.<br/>
+</p>
+
+<pre>
+  - Ajouter les dépendances à tomcat
+  - Configurer et utiliser javamail
+  - Envoyer un mail de validation
+  - Envoyer un mail de confirmation d'inscription
+  - Envoyer un mail en cas d'oublie de mot de passe
+</pre>
+
+<ul class="navigation">
+  <li>
+    <a href="servlet.html"><strong> &laquo; Servlet - JSP </strong></a>
+  </li>
+  <li>
+    <a href="index.html"> <strong>^ Sommaire ^</strong> </a>
+  </li>
+  <li>
+    <a href="#"> <strong>( a suivre )</strong> </a>
+  </li>
+</ul>
+
+</section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/gdufrene">gdufrene</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>

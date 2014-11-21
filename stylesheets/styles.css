@@ -436,3 +436,12 @@ footer p + p {
 .note a:hover {
   color: #f90;
 }
+
+i.icon-star {
+  color: #fc0;
+  float: left;
+  font-size: 18px;
+  margin-right: 8px;
+  margin-top: -4px;
+  content: "★";
+}
