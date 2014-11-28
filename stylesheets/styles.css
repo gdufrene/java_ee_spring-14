@@ -445,3 +445,11 @@ i.icon-star {
   margin-top: -4px;
   content: "★";
 }
+
+code.ann {
+  font-family: "Monaco", "New Courier";
+  font-size: 12px;
+  color: rgb(100, 100, 100);
+  background-color: #fff;
+}
+
