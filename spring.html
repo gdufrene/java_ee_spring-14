@@ -1,0 +1,290 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Java ee spring-14 by gdufrene</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Java EE / Spring</h1>
+        <p>Master e-services 2014</p>
+        <p class="view"><a href="https://github.com/gdufrene/java_ee_spring-14">View the Project on GitHub <small>gdufrene/java_ee_spring-14</small></a></p>
+        <ul>
+          <li><a href="https://github.com/gdufrene/java_ee_spring-14/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/gdufrene/java_ee_spring-14/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/gdufrene/java_ee_spring-14">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        
+        <h2>
+          <img src="http://docs.spring.io/spring/docs/4.1.3.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/images/note.png" style="position: relative; top: 3px"/>
+          <a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Spring.</h2>
+
+<p>
+        The Spring Framework provides a comprehensive programming and configuration model for modern Java-based enterprise applications
+</p>
+
+
+<p>
+          Comprenez que Spring est un "couteau suisse" pour faciliter la vie du développeur JAVA, spécialement si il développe pour JAVA EE (mais pas que).</p>
+
+<p>
+        Le coeur de spring c'est, à l'origine, un moteur d'injection de dépendance permettant l'inversion de contrôle du cycle de vie des objets. Mais encore ? Permettre de "repousser" de choix d'implémentation (ou d'instance) d'un objet inclus dans un autre.
+</p>
+
+<p>
+          Reprenons l'exemple de notre DAO JPA ou Jdbc. Imaginons que le développeur de notre interface ne soit pas le même que celui qui réalise la couche de persistance (donc du DAO). Le développeur de l'interface ne connait pas la classe qui sera utilisée, et d'ailleurs il n'a pas envie de faire new xxxJPADao(), ce qui "casserait" en parti l'abstraction que nous avons essayé de mettre en place. De l'autre coté, le developpeur de notre DAO ne sait pas où et comment son implémentation JPA sera utilisée. Il ne peut pas faire view.setDao( ... )
+</p>
+
+<p>
+        Heureusement il y a Spring. Dans l'interface on demandera à l'injecteur de dépendance de trouver et d'affecter le DAO, de l'autre on déclarera l'implémentation JPA comme composant DAO à être utilisé. Le tout sera initialisé et affecté au lancement de l'application.
+</p>
+
+<p>
+        Merci Martin, que ferions-nous sans toi. <br/>
+            <i> pour votre culture générale </i> : <a href="http://www.martinfowler.com/articles/injection.html">Inversion of Control Containers and the Dependency Injection pattern</a> 
+</p>
+
+<h2>L'injection de dépendances</h2>
+
+<p>
+  Téléchargez <a href="files/week4/SpringBasics.zip">cette archive</a>. A extraire quelquepart et à importer dans eclipse. <br/>
+  Ce projet défini des dépendances pour "spring-context" vers M2_REPO que vous devez résoudre avant de commencer à travailler.<br/>
+</p>
+
+<p>
+  Essayez de lancer <i>fr.eservices.sample1.Application</i>. Que se passe-t-il ? Pourquoi ?<br/>
+  Implémentez de manière simple le constructeur de cette classe pour y initialiser les propriétés. <br/>
+  Relancez l'application et vérifiez que cela fonctionne.<br/>
+</p>
+
+<p>
+  Nous aimerions éviter d'avoir à brancher les instances de Greeter, Printer et Welcome.<br/>
+  Supprimez le contenu du constructeur de Application.<br/>
+  Utilisons les annotations <code class="ann">@Component</code> et <code class="ann">@Autowired</code> pour définir les composants et leurs injections. <br/>
+  Un composant est une instance partagée du contexte spring, selon le pattern "singleton" par défaut.<br/>
+  L'annotation Autowired permet de placer automatiquement une instance du contexte possédant un type compatible.<br/>
+</p>
+
+<p>
+  La lecture de la documentation de référence <a href="http://docs.spring.io/spring/docs/4.1.3.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-basics">5.2</a> et surtout <a href="http://docs.spring.io/spring/docs/4.1.3.BUILD-SNAPSHOT/spring-framework-reference/htmlsingle/#beans-annotation-config">5.9 - 5.10</a> vous serons sans doute d'une aide précieuse.<br/>
+</p>
+
+<p>
+  Dans le main de l'application, créons un "ApplicationContext" pour obtenir une instance de notre objet Application.<br/>
+  Nous utiliserons plus particulièrement le "AnnotationConfigApplicationContext" comme instance d'ApplicationContext. Cette implémentation permet de configurer un context spring à l'aide des annotations que nous avons placés.<br/>
+  Utiliser l'annotation <code class="ann">@ComponentScan</code> pour définir la liste des packages que spring devra inspecter pour trouver nos composants.<br/>
+  Relancez l'application est vérifiez que cela fonctionne.<br/>
+</p>
+
+<p>
+  L'intérêt de spring est surtout de réaliser de genre de scénario d'injection lorsque les objets proviennent de librairies différentes, ou lorsque plusieurs implémentation d'une même classe peuvent être utilisés dans l'application.<br/>
+  Regardez le package <i>fr.eservices.sample2</i> et implémenter le <i>fr.eservices.sample2.appl.Application</i> à l'aide des objets console/english à disposition dans impl. Ils encapsule simplement les objet de sample1... <br/>
+  Il faudra évidemment placer toutes les annotations nécessaire sur ConsolePrinter, ConsoleWelcome, EnglishGreeter et Application.<br/>
+  Vérifiez le fonctionnement.
+</p>
+
+<p>
+  Utilisons maintenant les objets "Swing" et French.<br/>
+  Ajouter les annotations <code class="ann">@Component</code> sur ces objets et relancez l'application.</br>
+  Que se passe-t-il et pourquoi ?<br/>
+  Ajouter une annotation <code class="ann">@Qualifier</code> avec les noms "swing" et "french" sur les objets correspondant.<br/>
+  Vérifier qu'en plaçant les qualifier dans Application cela branche la bonne implémentation.<br/>
+  Essayer de bancher un Welcome console et un Printer Swing, puis vice-versa.<br/>
+</p>
+
+<p>
+  Nous avons utilisé des annotations pour configurer notre contexte spring mais il est possible
+  d'utiliser des fichiers de configuration en xml. Historiquement, c'est la manière dont on configurait
+  un contexte spring. Avantage : la configuration du contexte est indépendante du code Java, ce qui évite 
+  de recompiler les classes lors d'un changement de contexte. Inconvénient : le XML c'est assez pénible à
+  manipuler ...<br/>
+  Selon l'utilisation de votre librairie ou de votre application, il peut être intéressant de prévoir
+  une configuration par annotation ou par fichier XML.
+</p>
+
+<div class="note">
+  Télécharger la nouvelle version du "checker" <a href="http://eservices.webpulser.com/check-1.3.jar">ICI</a>. (version 1.3)<br/>
+  Installer ce jar dans votre repository maven :<br/>
+  <code>
+  mvn install:install-file -Dfile=check-1.3.jar -DgroupId=fr.eservices -DartifactId=code-checker -Dversion=1.3 -Dpackaging=jar
+  </code>
+  <br/>
+  Enfin, pour testez votre projet, placez-vous à la racine du projet puis : <br/>
+  <code>
+  mvn exec:java -Dexec.mainClass="tool.Check"  -Dexec.classpathScope=test -Dexec.args="check-spring1"
+  </code>
+  <br/>
+</div>
+
+<p>
+  Félicitation, vous avez compris le fonctionnement de base des beans spring.
+</p>
+
+<h2>Spring MVC</h2>
+
+<p>
+  la librairie "MVC" de spring permet d'utiliser les mécanismes d'injection de dépendance pour faciliter le 
+  branchement des différentes parties (model, vue, controller) de notre application web tout en assurant une certaine indépendance
+  entre nos objets.
+</p>
+
+<p>
+  Des annotations complémentaires vont également nous permettre de manipuler facilement
+  les données provenant de la requête. Par exemple l'annotation <code class="ann">@RequestParameter</code> permettra
+  de copier automatiquement le contenu d'un paramètre dans une variable.<br/>
+  Soit l'équivalent de <code>String param = request.getParameter("paramName")</code>
+</p>
+
+<p>
+  Spring MVC fourni un objet "RequestDispatcher" qui est une servlet qui va aiguiller toutes les requêtes
+  vers l'un des contrôleurs annotés et présents dans le contexte spring.
+</p>
+
+<center>
+<a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/images/mvc.png">
+<img src="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/images/mvc.png" height="300" />
+</a><br/>
+(source : <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">documentation spring MVC</a>)
+</center>
+
+<h3> DAO de gestion des auteurs </h3>
+
+<p>
+  Nous allons implémenter une gestion des auteurs.<br/>
+  Commencez par télécharger <a href="files/week4/sources-week4.zip">cette archive</a> dans votre projet. <br/>
+  Si ce n'est pas déjà fait, modifier votre pom pour configurer maven et compiler à niveau "1.8" de java.
+  Il faudra ajouter ceci dans votre pom, à l'intérieur de la balise "build" : <br/>
+<pre><code>&lt;plugins&gt;
+&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+  &lt;version&gt;3.2&lt;/version&gt;
+  &lt;configuration&gt;
+    &lt;source&gt;1.8&lt;/source&gt;
+    &lt;target&gt;1.8&lt;/target&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;
+&lt;/plugins&gt;
+</code></pre>
+</p>
+
+<p>
+  J'ai ajouté une classe de tests unitaires pour valider le fonctionnement de votre DAO.<br/>
+  Ajouter le répertoire "WEB-INF/test" à votre pom.xml comme répertoire de source pour les tests.<br/>
+  A ajouter également dans la balise "build".
+<pre><code>&lt;testSourceDirectory&gt;WEB-INF/test&lt;/testSourceDirectory&gt;</code></pre>
+</p>
+
+<p>
+  Il nous faudra aussi de nouvelle librairie pour nos tests : junit:junit en version 4.11<br/>
+  Ajouter celle-ci dans les dépendances en scope "test".<br/>
+  Une fois tout cela fait pensez à résoudre les dépendances et à mettre à jour le classpath d'eclipse.<br/>
+  <code>mvn dependency:resolve eclipse:eclipse</code><br/>
+</p>
+
+<p>
+Observez la classe "DaoTestConfig". La configuration de l'unité de persistance y est surchargé pour persister la base en mémoire uniquement. Cela permet de travailler de manière indépendante à la base de données qui est utilisé pour faire tourner notre application web. D'autre part l'implémentation mémoire est généralement plus rapide, ce qui permettra à nos tests unitaires de s'exécuter plus vite en plus d'être isolés.
+</p>
+
+<p style="padding: 0 100px">
+  <img src="files/week4/test-dao.png" align="left" style="margin-right: 10px"/>
+  Lancez les tests dans eclipse, implémentez le code du "AuthorDaoJPA" jusqu'à ce que tous les tests passent.<br/>
+  Cela vous demandera probablement de lire ou relire la documentation de l'Entity Manager et de la manière de construire des requêtes avec JPA. (voir page précédante).
+</p>
+
+<br style="clear: both"/>
+
+<p>
+  Comme vous pouvez le voir notre DAO et nos tests sont indépendant de l'environnement Web/Servlet.<br/>
+</p>
+
+<h3> Contrôleur de gestion des auteurs </h3>
+
+<p>
+ Ecrivons maintenant un contrôleur dont le rôle sera de valider quelques règles, et de faire le lien entre les appels à une servlet et notre DAO.</br>
+ Il nous faudra ajouter la dépendance vers org.springframework:spring-webmvc en version 4.1.2.RELEASE<br/>
+</p>
+
+<p>
+  Ajouter une classe AuthorControl dans le package "impl".<br/>
+  Cette classe possèdera une propriété dao de type AuthorDao.<br/>
+  Ajouter une opération "list" qui prends un "org.springframework.ui.Model" en paramètre et renvoie un "String".<br/>
+  Cette opération appellera le dao pour récupérer la liste des auteurs et ajoutera cette liste au model.<br/>
+  L'opération renverra le nom d'une vue, par exemple "authors".<br/>
+  Avec l'aide de la <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">documentation</a>, annotez votre classe pour qu'elle soit utilisée par spring. L'opération list sera branchée sur l'URL "authors.html".
+</p>
+
+<p>
+  Notez qu'il est aussi possible de tester ce modèle indépendamment du reste.<br/>
+  Il est même possible d'injecter un DAO factice dans notre contrôleur qui renverra toujours la même liste d'auteurs.
+  Ainsi, le test unitaire serait simplement de vérifier qu'après l'appel à la fonction "list" le modèle un attribut "authors" qui correspond à la liste des auteurs...<br/>
+  Ce scénario peut évidemment être beaucoup plus abouti si l'on veut vérifier que notre contrôleur respecte certaines règles "métiers" comme ne pas ajouter un auteur si son nom est null ou vide.
+<p>
+
+<h3> Vue liste des auteurs </h3>
+
+<p>
+  Le contexte spring fourni est configuré pour résoudre les noms de vues par des JSP présentes à la racine du projet.<br/>
+  Vous pouvez regarder la classe "impl.AppConfig" et "impl.WebAppInitializer" qui permettent de paramétrer spring sans avoir à écrire de xml.<br/>
+  Cette configuration peut également se faire à l'aide du fichier web.xml, d'un Listener particulier et de fichiers "applicationContext.xml".<br/>
+  Toutes les requêtes à un fichier ".html" sont interceptées par SpringDispatcherServlet.
+</p>
+
+<p>
+  Regardez et adaptez "authors.jsp" si besoin.
+  Le but est d'afficher dans un tableau HTML tous les auteurs.<br/>
+  Au dessus du tableau un lien amènera vers un formulaire permettant d'ajouter un auteur.<br/>
+  Au bout de chaque ligne un lien permettra de supprimer l'auteur après une confirmation (javascript).<br/>
+  Un lien permettra de modifier l'auteur, le lien sera posé soit sur le nom, soit sur un lien en fin de ligne.<br/>
+  Le formulaire de modification peut être le même que celui de création. Trouvez un moyen de réutilisez ce formulaire.<br/>
+</p>
+
+<h3> Lancer tomcat avec les dépendances maven </h3>
+
+<p>
+  Notre projet web dépend maintenant de nombreuses dépendances qu'il faudra ajouter dans le classpath de notre contexte web.<br/>
+  Nous pourrions copier à la main chacun des jar disponible dans le "repository" local de maven vers WEB-INF/lib.<br/>
+  Heureusement cette opération fastidieuse peut être réalisée par maven :)
+
+<pre><code>mvn dependency:copy-dependencies -DincludeScope=runtime -DoutputDirectory=WEB-INF/lib</code></pre>
+</p>
+
+<p>
+  Lancez maintenant tomcat et rendez-vous sur localhost:8080/tp1/authors.html
+</p>
+
+<ul class="navigation">
+  <li>
+    <a href="jpa.html"><strong> &laquo; JPA </strong></a>
+  </li>
+  <li>
+    <a href="index.html"> <strong>^ Sommaire ^</strong> </a>
+  </li>
+  <li>
+    <a href="#"> <strong>( a suivre )</strong> </a>
+  </li>
+</ul>
+
+</section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/gdufrene">gdufrene</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
