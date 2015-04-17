@@ -1,0 +1,92 @@
+<p><img src="http://www.univ-lille1.fr/digitalAssets/38/38040_logo-trans.png" alt="Université Lille 1" title=""></p>
+
+<h1 id="ifi-projet-jee">IFI - Projet JEE</h1>
+
+<p><strong>Session de rattrapage master e-services FA</strong></p>
+
+<p>En France on dénombre 170000 associations sportives pour 14 millions de pratiquants. <br>
+Sur base de ce constat nous souhaitons mettre en oeuvre une application permettant d’animer des communautés sportives à l’échelle régionale sous la forme de coupe sportive ou de challenge annuel. Notre application se veut généraliste mais sera déclinée par activité au besoin.</p>
+
+<p>Notre application prendra la forme d’un site internet sur lequel les membres viendront s’inscrire. <br>
+Les membres déclarerons leur affiliation à l’une des associations. Un responsable associatif validera cette affiliation. <br>
+Une fois inscrit et validé, le membre pourra venir renseigner une performance réalisée. <br>
+Nous considérerons une performance comme un nombre de point permettant d’émettre un classement général. <br>
+Les points renseignés peuvent être liés au classement d’une compétition ou à une performance ponctuelle.</p>
+
+<h2 id="liste-des-fonctionnalités"><i class="icon-list"></i> Liste des fonctionnalités.</h2>
+
+<p><i class="icon-tag"></i> <em>En tant que sportif, je souhaite m’inscrire sur le site afin de renseigner mes performances et évaluer mon niveau dans ma région.</em></p>
+
+<p>Pour s’inscrire un membre devra renseigner obligatoirement son nom, prénom, email, date de naissance, club affilié. <br>
+On supposera que les clubs sont déjà renseignés dans la base de données (par exemple par un import de la liste d’une fédération). <br>
+Lorsqu’un membre s’inscrit, sa demande est soumise à validation, on l’invite à attendre confirmation de cette inscription.</p>
+
+<p><i class="icon-tag"></i> <em>En tant que membre sportif je suis notifié de la validation de mon inscription et je peux m’identifier.</em></p>
+
+<p>Après qu’un référent ait valider mon inscription je reçoit un mail avec un mot de passe généré automatiquement. <br>
+Le mot de passe contient au moins 8 caractères, possède une majuscule, un symbole et un chiffre placé aléatoirement dans le mot de passe. <br>
+Je peux alors m’identifier à l’aide de mon mail et de mon mot de passe.</p>
+
+<p><i class="icon-tag"></i> <em>En tant que membre, je peux saisir une performance.</em></p>
+
+<p>Je renseigne la date de la performance, le nombre de point, le type de performance. <br>
+Si il s’agit d’une “compétition”, je suis invité à choisir parmi les compétitions déjà renseignées, ou à en saisir une nouvelle (un simple libellé). <br>
+Il devrait être possible d’ajouter une compétition sans avoir à quitter l’écran de saisi de la performance.</p>
+
+<p><i class="icon-tag"></i> <em>En tant que visiteur du site, je peux consulter le classement des meilleures performances</em></p>
+
+<p>Affichage d’un classement établi selon LA meilleure performance individuel de chacun des membres inscrits. <br>
+Le classement est régional, en fonction du lieu déclaré pour l’association pour laquelle le membre est affilié.</p>
+
+<p><i class="icon-tag"></i> <em>En tant que visiteur du site, je peux consulter le classement par compétition.</em></p>
+
+<p>Affichage d’un classement établi selon la performance à l’une des compétition et par région. <br>
+Les compétitions n’étant pas nécessairement régionales, il faudra donc trier les membres en fonction <br>
+de l’affiliation club de chacun.</p>
+
+<p><i class="icon-tag"></i> <em>En tant que membre référent d’une association je valide une inscription afin de permettre au membre de rentrer sur le site.</em></p>
+
+<p>Une liste des membres en attente de validation est présenté, trié par date décroissante de demande d’inscription au site. <br>
+Je peux visualiser les informations renseignées par un membre et je peux décider de valider son inscription. <br>
+Je peux refuser l’inscription de ce membre et laisser un commentaire. <br>
+Un membre dont l’inscription a été refusé apparaîtra en gris dans la liste des demandes d’inscription. <br>
+Je peux toujours décider plus tard de valider son inscription.</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu’admin, je peux assigner un membre référent à une association.</em></p>
+
+<p>Je choisis une association parmi une liste triée par nom. <br>
+La liste des membres affiliés à cette association apparait triée par nom. Le référent actuel, si il existe, est mis en évidence (par exemple en bleu). <br>
+Je peux sélectionner un nouveau référent pour cette association. <br>
+Il ne peut y avoir qu’un seul référent par association.</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu’admin j’ai une vue globale des demandes en attente de validation.</em></p>
+
+<p>Une liste me présente toute les demandes en attente de validation (pas celles qui sont validées, ni refusées) <br>
+Je peux, à la place du référent de l’association, valider ou refuser l’inscription d’un membre. <br>
+(voir scénario référent/validation)</p>
+
+
+
+<h2 id="livrable"><i class="icon-login"></i> Livrable.</h2>
+
+<p><i class="icon-user"></i> Le projet est individuel.  <br>
+<i class="icon-calendar"></i> Il est à rendre pour le 12 JUIN 2015 AVANT 22h00. <br>
+<i class="icon-folder-open"></i> Une archive (zip ou tar.gz) contenant les sources d’un projet maven et vos ressources web (vues, images, styles, scripts …)</p>
+
+<p>Les dépendances mavens ne seront pas fournies, elles doivent pouvoir être récupérées en utilisant “mvn compile”. <br>
+Votre projet utilisera spring, sera organisé selon un pattern MVC mettant en oeuvre des vues en JSP. <br>
+Les contrôleurs seront configurés à l’aide des annotations spring vues en cours/tp cette année. <br>
+Les informations seront persistées à travers des objets définis avec les annotation JPA dans une base de données relationnelles. <br>
+Au choix : MySQL, postgres ou H2 database. <br>
+Dans tous les cas des indications claires seront données pour initialiser la base de données si nécessaire. <br>
+Votre archive doit pouvoir être utilisée comme une application compatible JEE dans tomcat 8.</p>
+
+<p>Votre application devrait pouvoir se lancer en faisant :</p>
+
+<ul>
+<li>une extraction de votre archive dans le répertoire “webapp”, </li>
+<li>une compilation ,</li>
+<li>initialiser la base de données si nécessaire (par exemple à l’aide d’un script SQL) ,</li>
+<li>une copie éventuelle des dépendances dans WEB-INF/lib (à documenter) ,</li>
+<li>lancer Tomcat 8</li>
+</ul>
