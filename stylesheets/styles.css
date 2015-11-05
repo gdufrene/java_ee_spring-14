@@ -453,3 +453,36 @@ code.ann {
   background-color: #fff;
 }
 
+b {
+  color: #44A;
+  font-weight: bold;
+}
+
+code b {
+  color: #CCF;
+}
+
+h2.open, h2.close {
+  font-weight: normal;
+  font-size: 1.1em;
+  font-family: tahoma;
+  border: solid 1px #CCC;
+  padding: 5px;
+  border-radius: 5px;
+}
+h2.open {
+  margin-bottom: 0;
+}
+h2.close > a:before {
+  content: "⇢ ";
+}
+h2.open > a:before {
+  content: "⇣ ";
+}
+h2.open + div {
+  border: solid 1px #CCC;
+  border-width: 0 1px 1px 1px;
+  padding: 5px;
+  border-radius: 0 0 5px 5px;
+  margin-bottom: 20px;
+}

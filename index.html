@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Java ee spring-14 by gdufrene</title>
+    <title>JEE / spring by gdufrene</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -18,7 +18,7 @@
     <div class="wrapper">
       <header>
         <h1>Java EE / Spring</h1>
-        <p>Master e-services 2014</p>
+        <p>Master e-services 2015</p>
         <p class="view"><a href="https://github.com/gdufrene/java_ee_spring-14">View the Project on GitHub <small>gdufrene/java_ee_spring-14</small></a></p>
         <ul>
           <li><a href="https://github.com/gdufrene/java_ee_spring-14/zipball/master">Download <strong>ZIP File</strong></a></li>
@@ -53,10 +53,28 @@
 Les outils
 </h2>
 
-<h3>Java 1.8</h3>
+<h3>Java</h3>
 
 <p>
   Nous allons tout d'abords installer un JDK java 1.8 si ce n'est pas déjà fait.
+  Vérifions si java est déjà installé.
+</p>
+
+  <pre><code>$ java -version
+  java version "1.7.0_25"
+  Java(TM) SE Runtime Environment (build 1.7.0_25-b15)
+  Java HotSpot(TM) 64-Bit Server VM (build 23.25-b01, mixed mode)
+  </code></pre>
+
+  <p>
+    Ceci indiquerait que la version 1.7 est installé, mais nous aimerions une version 1.8.
+    Rendez-vous sur <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE Development Kit 8 Downloads</a> chez Oracle. Téléchargez et installez l'archive.
+  </p>
+
+<div class="collapsable">
+  <h2>Installer Java</h2>
+  <div>
+<p>
   Il faudra déterminer quel est l'architecture de notre poste de travail.
   Windows, Linux, Mac OS ?
   Système 32 bits ou 64 bits ?
@@ -72,24 +90,26 @@ PDT 2012; root:xnu-1699.32.7~1/RELEASE_X86_64 <b style="color: #F0F0C0">x86_64</
 </p>
 
 <p>
-  Vérifions si java est déjà installé.
+  Il faudra idéalement ajouter le chemin des binaires java dans la variable d'environnement "PATH" du système. <a href="https://www.java.com/fr/download/help/path.xml">Modifiez le PATH</a>.
 </p>
 
-<pre><code>$ java -version
-java version "1.7.0_25"
-Java(TM) SE Runtime Environment (build 1.7.0_25-b15)
-Java HotSpot(TM) 64-Bit Server VM (build 23.25-b01, mixed mode)
-</code></pre>
+<p>
+  Le <b>PATH</b> est une liste de dossiers parcourus par le système pour trouver les commandes exécutables appelées sans en préciser le chemin complet.
+  lorsque vous taper "java" dans l'invite de commande, le système va rechercher dans chacun des dossiers, dans l'ordre ou ils sont définis, un fichier exécutable portant ce nom. Si un tel programme est trouvé il est lancé, sinon vous aurez une erreur du type "java: command not found."<br/>
+  Il est aussi possible d'appeler un programme en précisant son chemin complet. Si vous taper "/opt/jdk1.8.0_11/bin/java -version" c'est ce programme en particulier qui sera appelé (en supposant qu'il existe).
+</p>
 
 <p>
-  Ceci indiquerait que la version 1.7 est installé, mais nous aimerions une version 1.8.
-  Rendez-vous sur <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE Development Kit 8 Downloads</a> chez Oracle. Téléchargez et installez l'archive. Il faudra idéalement ajouter le chemin des binaires java dans le "PATH" du système. <a href="https://www.java.com/fr/download/help/path.xml">Modifiez le PATH</a>. Sous OSX, je vous recommande d'installer <a href="http://brew.sh/">Homebrew</a> qui pourra sans doute vous aider. Imaginons que j'utilise linux et que j'ai décompressé l'archive dans /opt, cela a du créer un répertoire jdk1.8.0_11.
+  Le PATH est une chaine de caractère regroupant l'ensemble des dossier de recherche, séparés par un ':' sous linux/osx et par ';' sous windows.<br/>
+  Pour modifier ce PATH ;<br/>
+  Imaginons que j'utilise linux et que j'ai décompressé l'archive dans /opt, cela a du créer un répertoire jdk1.8.0_11.
 </p>
 
   <pre><code>$ echo 'export PATH="/opt/jdk1.8.0_11/bin:$PATH"' >> ~/.bashrc
 $ . ~/.bashrc
 </code></pre>
 
+  Le fichier .bashrc contenu dans votre répertoire utilisateur est exécuté à chaque fois qu'un shell de type bash est lancé.
 <p>
   Sous mac l'installation du package va se faire dans '/Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/Contents/Home/'. Le fichier à modifier pour le PATH est '.bash_profile' dans le HOME.
 </p>
@@ -98,13 +118,83 @@ $ . ~/.bashrc
 $ . ~/.bash_profile
 </code></pre>
 
-<p>Voilà notre premier outil installé. Téléchargez <a href="files/TestJava.java">ce fichier source</a>, compilons et exécutons.</p>
+</div>
+</div>
+
 <p>
-  Le fichier source contient quelques nouveautés introduites dans Java 8 telles que les "lamda expressions", la nouvelle API Java Time pour manipuler les Dates, le "StringJoiner", les Streams. Cela ne compilera donc que si vous avez correctement installé le JDK8.
+  Si vous travailler sous OSX, je vous recommande d'installer <a href="http://brew.sh/">Homebrew</a> qui pourra sans doute vous aider. C'est un gestionnaire de paquets linux adaptés pour pouvoir fonctionner sous mac. Cela vous permettra d'installer des outils intéressants et utiles venant du monde linux.
+</p>
+
+<p>
+  Téléchargez <a href="files/TestJava.java">ce fichier source</a>, compilons et exécutons.
+  Le fichier source contient quelques nouveautés introduites dans Java 8 telles que les "lamda expressions", la nouvelle API Java Time pour manipuler les Dates, le "StringJoiner", les Streams. Cela ne compilera donc que si vous avez correctement installé le JDK8.  
+</p>
+
+<div class="collapsable">
+  <h2>Compiler un source java</h2>
+  <div>
+<p>
+  Pour compiler un fichier il faut utiliser la commande "javac" suivi du source à compiler. 
+  La compilation transforme votre code source texte en une suite d'instructions et de données interprétable par la machine virtuelle java.
+  Ces fichiers compilés seront interprétables quelque soit le système d'exploitation utilisé: "Compile Once, Run Everywhere" (ou presque).
+</p>
+
+<p>
+  Sans options, cette commande créera des fichiers compilés à l'endroit où vous avez exécuté la commande.
+  Voici une petite liste d'option à connaitre :<br/>
+  <code>-d</code> suivi d'un répertoire permet d'indiquer où les ".class" doivent être créés.<br/>
+  <code>-sourcepath</code> indique l'endroit où rechercher les fichiers sources de l'utilisateur. Lorsque votre compilateur rencontre dans le source une classe qu'il ne connait pas, il essaiera de la rechercher et de la compiler depuis cet endroit<br/>
+  <code>-source</code> permet de s'assurer de la compatibilité des sources java pour une version minimale d'un compilateur. Il peut être en effet pratique d'utiliser cet option si vous possédez une version 1.8 alors que vos collègues utilisent la version 1.7 (et doivent recompiler vos sources)<br/>
+  <code>-target</code> permet de compiler du bytecode qui peut être lu et interprété par une JVM de cette version. La plupart des nouveautés syntaxique peuvent être compilées vers des versions de JVM inférieures. Les nouvelles versions du compilateur introduisent par contre des optimisations et une forme encodée des classes qui peuvent être différentes.
+</p>
+  </div>
+</div>
+
+
+<div class="collapsable">
+  <h2>Exécuter un programme java</h2>
+  <div>
+
+<p>
+  Pour exécuter votre programme il faut utiliser la commande "java" suivi d'une classe contenant une méthode "main" (sans l'extension .class).
+  C'est le point d'entrée de notre programme java. La signature de cette méthode doit être :<br/>
+  <code>public static void main(String[] args)</code><br/>
+  Les arguments passés à votre ligne de commande se retrouvent dans le tableau "args" (dont vous pouvez changer le nom évidemment).<br/>
+</p>
+
+<p>
+  Généralement, nous utilisons des "librairies" dont il faudra indiquer le chemin à la JVM pour que les classes dont vous faîtes référence dans votre programme puisse fonctionner. De nombreuses librairies sont chargées de base par la JVM tel que "rt.jar" contenant la définition de java.lang.Integer (et de la plupart des classes fournies avec la JVM).<br/>
+  Les fichiers jar ne sont que des archives "zip" dans lesquelles nous avons rangés nos classes et un fichier META-INF/MANIFEST.MF décrivant éventuellement des informations complémentaires sur le compilateur ou autre ...<br/>
+</p>
+
+<p>
+  Lorsqu'une classe est référencée par une autre, la JVM va en rechercher le code dans les librairies et les dossiers dont vous avez fourni la liste. C'est cette liste que l'on nomme le <b>CLASSPATH</b>, à ne pas confondre avec la variable d'environnement PATH.<br/>
+  Le CLASSPATH se défini à la compilation ou à l'exécution par l'option <code>-cp</code> suivi d'une chaine de caractère reprenant tous les dossiers et librairies dans lesquels la JVM ira chercher après les classes. Chaque dossier ou librairie sera séparé par un ":".<br/>
+  Sans cette option la JVM ne recherche que dans le répertoire courant (celui dans lequel vous êtes en lançant java).<br/>
+</p>
+
+<p>
+  Vous avez peut être déjà remarqué qu'il est possible d'exécuter des fichiers jar ?<br/>
+  Quand vous double-cliquez dessus dans votre explorateur de fichier, par exemple...<br/>
+  Lorsque vous le faîtes, la commande <code>java -jar <i>fichier.jar</i></code> est en fait exécuter.<br/>
+  <code>-jar</code> indique à la JVM de rechercher dans ce jar après la classes principale à lancer. Cette recherche se fait dans le fichier MANIFEST dans lequel une "MainClass" doit être indiqué.
+</p>
+
+<p>
+  Il peut être utile de définir ou re-définir une variable d'environnement pour un programme java en particulier.<br/>
+  <code>-D</code> permet de définir une variable. la syntaxe est : <code>-D<b>maVariable</b>=<b>maValeur</b></code>.<br/>
+  c'est une manière de passer un paramètre optionnel à un programme java.
+</p>
+
+  </div>
+</div>
+
+<p>
+  Pour notre exemple minimaliste, une fois le fichier java compilé, exécutez simplement "java TestJava".
 </p>
 
 <div class="note">
-  <h5>Tester votre installation Java 1.8</h5>
+  <h5>Tester votre installation Java</h5>
   Télécharger ce <a href="http://eservices.webpulser.com/check.jar">fichier check.jar</a>.<br/>
   Exécuter ce jar et mettre en paramètre "init" suivi de votre prénom et votre nom.<br/>
   exemple :
@@ -133,31 +223,25 @@ Maven est développé en Java et le script "mvn" utilise la variable d'environem
 
 <p>
   Page de téléchargement de maven : <a href="http://maven.apache.org/download.cgi">maven.apache.org/download.html</a><br/>
-  <a href="http://mir2.ovh.net/ftp.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz">Archive maven 3.2.3</a> à extraire. Ajouter le répertoire bin à votre PATH, puis vérifier en tapant <i>mvn -v</i> ; vous devriez obtenir quelquechose de ce type :
+  <a href="http://mir2.ovh.net/ftp.apache.org/dist/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz">Archive maven 3.3.3</a> à extraire. Ajouter le répertoire bin à votre PATH, puis vérifier en tapant <i>mvn -v</i> ; vous devriez obtenir quelquechose de ce type :
 </p>
 
 <pre><code>
-Apache Maven 3.2.3 (33f8c3e1027c3ddde99d3cdebad2656a31e8fdf4; 2014-08-11T22:58:10+02:00)
-Maven home: /Users/guillaume/install/apache-maven-3.2.3
+Apache Maven 3.3.3 (7994120775791599e205a5524ec3e0dfe41d4a06; 2015-04-22T13:57:37+02:00)
+Maven home: /Users/guillaume/install/apache-maven-3.3.3
 Java version: 1.8.0_11, vendor: Oracle Corporation
 Java home: /Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/Contents/Home/jre
 Default locale: fr_FR, platform encoding: UTF-8
-OS name: "mac os x", version: "10.7.5", arch: "x86_64", family: "mac"
+OS name: "mac os x", version: "10.10.2", arch: "x86_64", family: "mac"
 </code></pre>
-
-<div class="note">
-  <h5>Tester votre installation Maven 3.2.3</h5>
-  Exécuter le jar "check.jar" et mettre en paramètre "check-mvn".<br/>
-  <code>
-    java -jar check.jar check-mvn
-  </code>
-</div>
 
 <p>
   Le principal intérêt de maven est de gérer des dépendances vers des librairies. Ces librairies sont téléchargées depuis un "repository", généralement le repository "central" maven.<br/>
   A l'université, les connexions sur le web doivent passées par le proxy cache. Pour que maven utilise le proxy, il faut modifier le fichier "settings.xml"
   situé dans votre 'HOME', dans le répertoire '.m2'<br/>
-  Ce répertoire contiendra également toutes les librairies téléchargées (dans 'repository') par maven au fur et à mesure de son utilisation. Il est possible que ce répertoire devienne assez lourd avec le temps ...
+  Ce répertoire contiendra également toutes les librairies téléchargées (dans 'repository') par maven au fur et à mesure de son utilisation. Il est possible que ce répertoire devienne assez lourd avec le temps ...<br/>
+  Afin de le pas encombrer votre compte unix avec ces fichiers, je vous recommande de modifier l'endroit où maven stockera les librairies. Ajouter ceci, en l'adaptant, dans votre fichier "settings.xml" :<br/>
+  <code>&lt;localRepository&gt;/local/<b>username</b>/m2&lt;localRepository&gt;</code>
 </p>
 
 <p>contenu du fichier settings.xml pour la configuration proxy</p>
@@ -174,6 +258,15 @@ OS name: "mac os x", version: "10.7.5", arch: "x86_64", family: "mac"
       &lt;password&gt;&lt;/password&gt;
       &lt;nonProxyHosts&gt;localhost|127.0.0.1&lt;/nonProxyHosts&gt;
     &lt;/proxy&gt;
+    &lt;proxy&gt;
+       &lt;active&gt;true&lt;/active&gt;
+       &lt;protocol&gt;https&lt;/protocol&gt;
+       &lt;host&gt;cache-etu.univ-lille1.fr&lt;/host&gt;
+       &lt;port&gt;3128&lt;/port&gt;
+       &lt;username&gt;&lt;/username&gt;
+       &lt;password&gt;&lt;/password&gt;
+       &lt;nonProxyHosts&gt;localhost|127.0.0.1&lt;/nonProxyHosts&gt;
+     &lt;/proxy&gt;
   &lt;/proxies&gt;
 &lt;/settings&gt;
 </code></pre>
@@ -184,36 +277,16 @@ OS name: "mac os x", version: "10.7.5", arch: "x86_64", family: "mac"
 
 <p>Voilà votre 2ème outil installé.<p>
 
-<h3>
-<a name="ide" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
-IDE
-</h3>
-  
-<p>
-Je vous recommande d'utiliser un IDE (Integrated Development Environment) du type :
-
-<div>
-  <div style="width: 50%; text-align: center; float: left">
-    <a href="https://netbeans.org/downloads/">
-      <img src="https://netbeans.org/images_www/v7/design/logo_netbeans_red.png" /><br/>
-      netbeans
-    </a>
-  </div>
-  <div style="width: 50%; text-align: center; float: left">
-    <a href="https://www.eclipse.org/downloads/">
-      <img src="https://www.eclipse.org/eclipse.org-common/themes/solstice/public/images/logo/eclipse-800x188.png" width="200" height="47" /><br/>
-      eclipse
-    </a>
-  </div>
+<div class="note">
+  <h5>Tester votre installation Maven</h5>
+  Exécuter le jar "check.jar" et mettre en paramètre "check-mvn".<br/>
+  <code>
+    java -jar check.jar check-mvn
+  </code>
 </div>
 
-<p>
-Je ne vous recommande pas l'utilisation de plugins du type "maven pour eclipse" ou encore "WTP", selon moi c'est du gaspillage de ressource mémoire et potentiellement du temps perdu en plantage divers et varié. Idem si vous choisissez netbeans, la version "Java SE" devrait être suffisante.<br/>
-Je n'assure pas de support sur netbeans ou eclipse avec les plugins maven et/ou WTP, vous êtes prévenu.
-</p>
-
 <h3>
-<a name="ide" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+<a name="autres_outils" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
 Autres 'outils' intéressants
 </h3>
 
@@ -243,13 +316,36 @@ export no_proxy=localhost,127.0.0.0/8,*.local
 </p>
 
 <p>
-  Vous devriez prendre un peu de temps pour lire les pages "man" de ces deux commandes très utile lorsque l'on fait du développement web.
+  Vous devriez prendre un peu de temps pour lire les pages "man" de ces deux commandes très utiles lorsque l'on fait du développement web.
 </p>
 
+
+<h3>
+<a name="training" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+Mise en jambes
+</h3>
+
 <p>
-  <a href="https://addons.mozilla.org/fr/firefox/addon/firebug/">
-    <img src="http://www.nosyweb.fr/images/stories/article/outils/firebug_firefox.png" height="50" style="float: left; margin-right: 10px"> Firebug</a> est un plugin pour firefox fort pratique que vous devriez installer. Il permet de visualiser la structure HTML d'une page, de debuger du javascript, d'analyse les échanges réseaux, les cookies et bien d'autres choses ...
+Nous allons développer un programme qui analysera les données de vol d'un drone afin d'en tirer quelques statistiques.
+
+<ol>
+  <li>Etudiez les fichiers sur ce <a href="http://eservices.webpulser.com/week1/">serveur web</a></li>
+  <li>Ecrivez un programme qui permet d'extraire l'altitude maximale (GPS) du vol</li>
+  <li>Modifiez votre programme pour qu'il implémente l'<a href="http://eservices.webpulser.com/week1/AltPathAnalyser.java">interface suivante</a>, contenu dans ce <a href="http://eservices.webpulser.com/files/eservices-api-1.0.jar">fichier jar</a></li>
+  <li>Pensez à tester avec le fichier de vol fourni</li>
+</ol>
+
 </p>
+
+<div class="note">
+  <h5>Tester votre analyseur de vol</h5>
+  Télécharger <a href="http://eservices.webpulser.com/data.zip">ce fichier zip</a>. Lancez le jar "check" avec les paramètres "alt" suivi du chemin vers le zip et enfin le nom complet (avec le paquetage) de votre classe d'analyse qui implémente l'interface AltPathAnalyser<br/>
+  <code>
+    java -jar check.jar check-alt chemin/vers/le/fichier.zip votre.paquetage.FlightAnalyser
+  </code>
+</div>
+  
+
 
 <ul class="navigation">
   <li></li>
@@ -268,6 +364,12 @@ export no_proxy=localhost,127.0.0.0/8,*.local
       <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
     </footer>
     <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+
+<script src="javascripts/jquery.js"></script>
+<script src="javascripts/jquery.collapse.js"></script>
+<script type="text/javascript">
+$(".collapsable").collapse();
+</script>
+
   </body>
 </html>
