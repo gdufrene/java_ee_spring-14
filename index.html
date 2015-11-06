@@ -341,7 +341,7 @@ Nous allons développer un programme qui analysera les données de vol d'un dron
   <h5>Tester votre analyseur de vol</h5>
   Télécharger <a href="http://eservices.webpulser.com/data.zip">ce fichier zip</a>. Lancez le jar "check" avec les paramètres "alt" suivi du chemin vers le zip et enfin le nom complet (avec le paquetage) de votre classe d'analyse qui implémente l'interface AltPathAnalyser<br/>
   <code>
-    java -jar check.jar check-alt chemin/vers/le/fichier.zip votre.paquetage.FlightAnalyser
+    java -cp chemin/vers/class:check.jar check-alt chemin/vers/le/fichier.zip votre.paquetage.FlightAnalyser
   </code>
 </div>
   
