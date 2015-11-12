@@ -47,7 +47,7 @@ public class TestJDBC implements ITestJDBC {
     db.connect();
     System.out.println( "Test du mot de passe");
     System.out.println(
-      " ==> " + db.checkPasswordBasic( "guillaume.dufrene@webpulser.com", "test" )
+      " ==> " + db.checkPasswordBasic( "xxEMAILxx", "test" )
     );
   }
   

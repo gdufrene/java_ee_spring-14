@@ -18,7 +18,7 @@
     <div class="wrapper">
       <header>
         <h1>Java EE / Spring</h1>
-        <p>Master e-services 2014</p>
+        <p>Master e-services 2015</p>
         <p class="view"><a href="https://github.com/gdufrene/java_ee_spring-14">View the Project on GitHub <small>gdufrene/java_ee_spring-14</small></a></p>
         <ul>
           <li><a href="https://github.com/gdufrene/java_ee_spring-14/zipball/master">Download <strong>ZIP File</strong></a></li>
@@ -55,7 +55,7 @@
 <h2>Maven</h2>
 
 <p>
-  Il faut dont faire de notre projet java, un projet "maven". Cela se fait simplement en ajoutant "pom.xml" à la racine.<br/>
+  Il faut faire de notre projet java, un projet "maven". Cela se fait simplement en ajoutant un fichier "pom.xml" à la racine.<br/>
   Un fichier pom décrit notre projet en "artefact", dans un "group" et possédant une "version".<br/>
   Le projet étant "packagé" selon un format défini.<br/>
 </p>
@@ -70,6 +70,9 @@
 <p>
   Le pom contiendra également le nom du projet et différentes informations nécessaires à la compilation ou au packaging de notre projet.<br/>
   Le plus intéressant : cela contiendra des dépendances vers des librairies, qui elles-même peuvent tirer d'autres par dépendances transitives.<br/>
+</p>
+
+<p>
   Il faut distinguer différents type de dépendances, nommées "scope" dans le vocabulaire maven.<br/>
 
   &raquo; <i>compile</i> : (par défaut) indique que cette librairie est nécessaire pour la compilation et à l'exécution. <br/>
@@ -97,7 +100,7 @@
 <h2>Premières entités</h2>
 
 <p>
-  Avec JPA, nous pouvons annoter nos classes JAVA pour indiquer que les données de ces classes seront persistées. De manière simple, il "suffit" de placer l'annotation <code class="ann">@Entity</code> sur une classe pour que cela fonctionne ... ou presque. Il est nécessaire que les propriétés de l'objet à persister soit accessibles par le gestionnaire d'entité.
+  Avec JPA, nous pouvons annoter nos classes JAVA pour indiquer que les données de ces classes seront persistées. De manière simple, il "suffit" de placer l'annotation <code class="ann">@Entity</code> sur une classe pour que cela fonctionne ... ou presque. Il est nécessaire que les propriétés de l'objet à persister soient accessibles par le gestionnaire d'entité.
 </p>
 
 <p>
@@ -138,11 +141,13 @@ Vous pouvez aussi vous plonger dans la <a href="http://docs.oracle.com/javaee/7/
 <p>
   Reprenez le diagramme UML ci-dessous et implémentez le à l'aide d'annotation jpa.<br/>
   L'ensemble des entitées seront situées dans le package "api.model".<br/>
-  Vous trouverez dans <a href="files/week3/sources-week3.zip">cette archive</a> des classes vides à compléter.
+  <!-- Vous trouverez dans <a href="files/week3/sources-week3.zip">cette archive</a> des classes vides à compléter. 
   Vous trouverez également un ensemble d'interfaces à implémenter plus tard.
+  -->
 </p>
 
-<a href="files/week3/boardgame.png"><img src="files/week3/boardgame.png" width="910"/></a>
+<a href="files/week3/DiagrammeCompet.png" style="display: block; text-align: center">
+  <img src="files/week3/DiagrammeCompet.png" align="center"/></a>
 
 <div class="note">
   Télécharger la nouvelle version du "checker" <a href="http://eservices.webpulser.com/check.jar">ICI</a>. (version 1.2)<br/>

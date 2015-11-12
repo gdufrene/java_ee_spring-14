@@ -18,7 +18,7 @@
     <div class="wrapper">
       <header>
         <h1>Java EE / Spring</h1>
-        <p>Master e-services 2014</p>
+        <p>Master e-services 2015</p>
         <p class="view"><a href="https://github.com/gdufrene/java_ee_spring-14">View the Project on GitHub <small>gdufrene/java_ee_spring-14</small></a></p>
         <ul>
           <li><a href="https://github.com/gdufrene/java_ee_spring-14/zipball/master">Download <strong>ZIP File</strong></a></li>
@@ -32,7 +32,7 @@
 
 
 <p>
-  Il y a fort longtemps dans une galaxie lointaine ... lorsque l'on souhaitait accéder à une base de données relationnel on utilisait un drivers spécifique pour LA base de données visée et on écrivait du code SQL spécifique (car le SQL n'était pas encore très standardisé). On utilisait également des opérations spécifique du drivers.
+  Il y a fort longtemps dans une galaxie lointaine ... lorsque l'on souhaitait accéder à une base de données relationnelle, on utilisait un drivers spécifique pour LA base de données visée et on écrivait du code SQL spécifique (car le SQL n'était pas encore très standardisé). On utilisait également des opérations spécifiques du drivers.
 </p>
 
 <h2>JDBC</h2>
@@ -56,6 +56,7 @@
 </li><li> çà "parle" le SQL :)
 </li></ul>
 </p>
+
   
 <p>
   Commençons par créer une table et mettons y quelques données...<br/>
@@ -94,12 +95,17 @@ wget http://gdufrene.github.io/java_ee_spring-14/files/tp2/TestJDBC.java
 </pre></code>
 
 <p>
+  Pour manipuler les données présentes dans sqlite, nous aurons besoin d'un drivers implémentant les spécification JDBC : <a href="https://bitbucket.org/xerial/sqlite-jdbc/downloads/sqlite-jdbc-3.8.11.2.jar">sqlite-jdbc-3.8.11.2.jar</a>.<br/>
+  Cette librairie fournie la classe java "org.sqlite.JDBC" qui est le drivers à utiliser.
+</p>
+
+<p>
   Compilons ce petit objet qui se connecte à la base.<br/>
   En vous plaçant dans "WEB-INF" :<br/>
   <code>javac -sourcepath src -d classes src/jdbc/TestJDBC.java</code><br/>
   L'option "sourcepath" permet d'indiquer où trouver les fichiers sources nécessaire à la compilation. L'option "d" indique l'endroit où les fichiers class seront compilés.<br/>
   Essayons de d'exécuter. Il sera nécessaire de rentre le drivers sqlite-jdbc accessible à l'exécution (dans le classpath)<br/>
-  <code>java -cp lib/sqlite-jdbc-3.8.7.jar:classes jdbc.TestJDBC</code><br/>
+  <code>java -cp lib/sqlite-jdbc-3.8.11.2.jar:classes jdbc.TestJDBC</code><br/>
   L'option "cp" permet de spécifiez les endroits ou se trouve les class nécessaire, à la compilation, ou à l'exécution. Il peut contenir des répertoires ou des fichiers jar. Le classpath est séparé par ":" sous linux/mac et par ";" sous windows.<br/>
   pour le moment vous devriez obtenir :
 </p>
@@ -115,11 +121,14 @@ Test du mot de passe
 
 <div class="note">
   <h5>Tester votre opération checkPasswordBasic</h5>
-  <b style="color: #ff6666; font-weight: bold">Attention</b> le fichier <a href="http://eservices.webpulser.com/check.jar">check.jar</a> a été mis à jour, pensez à télécharger la nouvelle version (1.1)<br/>
+
+  <b style="color: #ff6666; font-weight: bold">Attention</b> le fichier <a href="http://eservices.webpulser.com/check.jar">check.jar</a> a été mis à jour, pensez à télécharger la nouvelle version<br/>
+  
+  
   Exécutons le check, en mettant dans le classpath votre implémentation de TestJDBC, et la librairie sqlite-jdbc et mettre en paramètre "check-jdbc1".<br/>
   Cette ligne suppose que "check.jar" soit contenu dans "WEB-INF", adapter la ligne de code si ce n'est pas le cas.<br/>
   <code>
-    java -cp classes:check.jar:lib/sqlite-jdbc-3.8.7.jar tool.Check check-jdbc1
+    java -cp classes:check.jar:lib/sqlite-jdbc-3.8.11.2.jar tool.Check check-jdbc1
   </code>
 </div>
 
@@ -165,16 +174,16 @@ private static String sha1(String password) {
 <div class="note">
   <h5>Tester vos opérations pour la 2e partie</h5>
   <code>
-    java -cp classes:check.jar:lib/sqlite-jdbc-3.8.7.jar tool.Check check-jdbc2
+    java -cp classes:check.jar:lib/sqlite-jdbc-3.8.11.2.jar tool.Check check-jdbc2
   </code>
 </div>
 
 <h3>Mettre à jour votre git</h3>
 
 <p>
-  Il est temps de mettre à jour votre repository de source.<br/>
+  Il est temps de mettre à jour votre repository de sources.<br/>
   Il n'est pas souhaitable de commiter les fichiers jar, ceux-ci peuvent être retrouvés facilement.<br/>
-  Ecrire une règle dans votre ".gitignore" pour ne pas exclure les fichier .jar ainsi que les fichier .db (base sqlite)<br/>
+  Ecrire une règle dans votre ".gitignore" pour ne pas inclure les fichiers .jar ainsi que les fichiers .db (base sqlite)<br/>
   Ajouter le ".gitignore" pour le prochain commit. <code>git add .gitignore</code><br/>
   Ajouter tous les nouveaux fichiers à votre commit <code>git add .</code><br/>
   Vérifier le contenu de votre prochain commit <code>git status</code><br/>
@@ -186,8 +195,8 @@ private static String sha1(String password) {
 <p>
   En environnement de travail, avant de pousser ou de commencer à travailler en début de journée il convient généralement de "Tirer" les modifications de code réalisées par vos collègues.<br/>
   <code>git pull</code><br/>
-  Si des conflits surviennes, visualisé les fichiers en conflit avec git status, modifiez les pour conserver le code nécessaire, puis ajouter les pour un prochain commit qui résoudra le conflit.<br/>
-  lorsque vous avez corrigé et ajouté tous les fichiers en conflit, faite de nouveau un commit et un push.
+  Si des conflits surviennent, visualisez les fichiers en conflit avec git status, modifiez les pour conserver le code nécessaire, puis ajoutez les pour un prochain commit qui résoudra le conflit.<br/>
+  Lorsque vous avez corrigé et ajouté tous les fichiers en conflit, il faut faire de nouveau un commit et un push.
 </p>
 
 <h3>Configurer eclipse pour travailler efficacement</h3>
@@ -255,7 +264,7 @@ private static String sha1(String password) {
   les champs du formulaire seront nommés : firstname, lastname, email, password.
 </li><li> Créer une servlet ("/signin") qui récupère les paramètres.
 </li><li> vérifier la validité des paramètres dans votre servlet <br/>
-</li><li> Gestion des erreur : ré-afficher le formulaire avec les champs en erreur (class has-error).
+</li><li> Gestion des erreurs : ré-afficher le formulaire avec les champs en erreur (class has-error).
 </li><li> Si tout est Ok, enregistrer l'utilisateur et rediriger l'utilisateur vers une page de confirmation.
 </li></ol>
 
@@ -274,7 +283,7 @@ private static String sha1(String password) {
 <div class="note">
   <h5>Tester votre authentification et inscription</h5>
   <code>
-    java -cp classes:check.jar:lib/sqlite-jdbc-3.8.7.jar tool.Check check-auth
+    java -cp classes:check.jar:lib/sqlite-jdbc-3.8.11.2.jar tool.Check check-auth
   </code>
 </div>
 
@@ -322,7 +331,7 @@ private static String sha1(String password) {
     <a href="index.html"> <strong>^ Sommaire ^</strong> </a>
   </li>
   <li>
-    <a href="jpa.html"> <strong>JPA &raquo;</strong> </a>
+    <!-- a href="jpa.html"> <strong>JPA &raquo;</strong> </a -->
   </li>
 </ul>
 
