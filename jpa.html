@@ -61,7 +61,7 @@
 </p>
 
 <code><pre>
-  &lt;groupId&gt;fr.eservices.xxVotreNomxx&lt;/groupId&gt;
+  &lt;groupId&gt;fr.eservices.<b>xxVotreNomxx</b>&lt;/groupId&gt;
   &lt;artifactId&gt;projet-jee&lt;/artifactId&gt;
   &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
   &lt;packaging&gt;war&lt;/packaging&gt;
@@ -70,10 +70,26 @@
 <p>
   Le pom contiendra également le nom du projet et différentes informations nécessaires à la compilation ou au packaging de notre projet.<br/>
   Le plus intéressant : cela contiendra des dépendances vers des librairies, qui elles-même peuvent tirer d'autres par dépendances transitives.<br/>
+  Les dépendances sont normalement présentes sur un serveur "central" maven. C'est un site regroupant toutes les librairies de projets qui souhaitent être diffusés/utilisés.<br/>
+  Il est aussi possible d'ajouter d'autres "repository" par de la configuration dans le pom, ou dans les settings de maven.<br/>
 </p>
 
 <p>
-  Il faut distinguer différents type de dépendances, nommées "scope" dans le vocabulaire maven.<br/>
+  Les dépendances seront stockée sur votre ordinateur dans un repository local, par défaut dans ~/.m2/repository.<br/>
+  Il est possible d'ajouter manuellement des librairies dans ce repository. Ce qui peut être utile pour les librairies qui ne sont pas fourni au format maven (avec un pom ou sur le repo central ...).<br/>
+</p>
+
+<p>
+  La conception interne de maven est modulaire et chaque "plugin" est responsable d'une fonctionnalité. Ces mêmes plugins sont également des artefacts maven disponible sur le repo central et téléchargés au besoin.<br/>
+  Ainsi, c'est le plugin "install" qui va gérer les insersions dans le repo local.<br/>
+  Pour mettre un jar quelconque dans votre repo local on utilisera la commande :<br/>
+  <pre>mvn install:install-file -Dfile=<b>fichier</b>.jar -DgroupId=<b>mon.groupe</b> -DartifactId=<b>nom-librairie</b> -Dversion=<b>version</b> -Dpackaging=<b>typeArtefact</b></pre>
+  La version est nécessairement numérique, séparée par des points.<br/>
+  typeArtefact, généralement <b>jar</b> est le format du fichier géré pour cette dépendance.
+</p>
+
+<p>
+  Il faut distinguer différents ensembles de dépendances, nommées "scope" dans le vocabulaire maven.<br/>
 
   &raquo; <i>compile</i> : (par défaut) indique que cette librairie est nécessaire pour la compilation et à l'exécution. <br/>
   &raquo; <i>runtime</i> : uniquement nécessaire à l'exécution.<br/>
@@ -82,19 +98,58 @@
 </p>
 
 <p>
+  Par convention, maven supposera une certaine structure de dossier de votre projet : <br/>
+  <ul>
+      <li>src
+        <ul>
+          <li>main
+          <ul>
+            <li>java : les sources principales</li>
+            <li>resources : les fichiers de configuration et autre, inclus dans la librairie</li>
+            <li>webapp (dans le cas d'un war) : les fichiers, autres que les class et resources, inclus dans le war</li>
+          </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>test
+            <ul>
+              <li>java</li>
+              <li>resources</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+  </ul>
+  Le répertoire de compilation sera normalement "target".<br/>
+  Tout cela est configurable à travers la directive "build" de votre pom.xml.</br>
+
+</p>
+
+
+<p>
   Vous trouverez dans ce fichier <a href="files/week3/pom.xml">pom.xml</a> une structure de base décrivant votre projet.<br/>
-  Vous pouvez ensuite executer <code>mvn dependency:resolve</code> pour résoudre et télécharger toutes les dépendances. Elles se rangeront dans votre "Home"/.m2/repository qui pourra vite devenir assez volumineux si vous travaillez régulièrement avec maven sur différents projets.<br/>
+  Vous pouvez ensuite executer <code>mvn dependency:resolve</code> pour résoudre et télécharger toutes les dépendances.<br/> 
+  Elles se rangeront dans votre repo local qui pourra vite devenir assez volumineux si vous travaillez régulièrement avec maven sur différents projets.<br/>
+  Rappel : Vous pouvez modifier votre .m2/settings.xml pour modifier l'emplacement où maven rangera toutes les dépendances.<br/>
   Visualisez l'arbre des dépendances avec <code>mvn dependency:tree</code>.
-  Vous pouvez aussi mettre à jour (ou créer) les fichiers .project et .classpath utilisés par eclipse.<br/>
+</p>
+
+<p>
+  Un plugin permet de mettre à jour les dépendances d'éclipse en fonction de ce que contient le pom.xml</br>
+  Je parle ici d'un plugin eclipse pour maven, à ne pas confondre avec l'inverse (ex: plugin m2e d'eclipse).<br/>
+  Ce plugin va en fait mettre à jour (ou créer) les fichiers .project et .classpath utilisés par eclipse.<br/>
   Cela permettra d'ajouter les dépendances dans le classpath d'eclipse.<br/>
   Pour cela utilisez <code>mvn eclipse:eclipse</code><br/>
-  Rafraîchissez votre projet avec F5.<br/> 
-  
+  Et rafraîchissez votre projet avec F5, ou clic droit/refresh.<br/> 
+</p>
+
+<p>
   <img src="files/week3/eclipse_maven.png" style="float: left; margin: 5px"/> <br/> 
    Il faudra également définir la variable "M2_REPO" dans votre workspace pour indiquer à eclipse où est rangé le repository maven.<br/>
   Rendez-vous dans Outils (ou Eclipse) / Préférence / Java / Build Path / Classpath Variables.<br/>
   Ajouter une variable "M2_REPO" qui pointe vers "home"/.m2/repository<br/>
   <div style="clear: both"> </div>
+  L'utilisation d'une variable permet à plusieurs personnes de se partager le fichier ".classpath" sans avoir de soucis avec l'endroit ou se trouve les librairies sur leur environnement de travail. La variable est indépendante du projet, elle est liée au workspace eclipse.
 </p>
 
 <h2>Premières entités</h2>
@@ -111,7 +166,7 @@
 </p>
 
 <p>
-  Pour certaines propriétés il est utile de mettre d'autres annotations pour indiquer comment le gestionnaire ou la base se comportera. Par exemple l'identifiant de l'entité doit être annoté <code class="ann">@Id</code>. Nous pouvons aussi indiquer que cette propriété sera générée par la base via une séquence (ou auto increment). Pour cela nous ajoutons la propriété <code class="ann">@GeneratedValue</code>
+  Pour certaines propriétés, il est utile de mettre d'autres annotations pour indiquer comment le gestionnaire ou la base se comportera. Par exemple l'identifiant de l'entité doit être annoté <code class="ann">@Id</code>. Nous pouvons aussi indiquer que cette propriété sera générée par la base via une séquence (ou auto increment). Pour cela nous ajoutons la propriété <code class="ann">@GeneratedValue</code>
 </p>
 
 <p>
@@ -124,7 +179,8 @@
 
 <p>
   Le "contexte de persistance" JPA se configure avec un fichier "persistence.xml" placé dans le classpath, dans un répertoire "META-INF/". Le fichier pom fourni est configuré pour placer toutes les "ressources" utiles (et copiées dans le classpath par maven) dans WEB-INF/resources. Donc, il vous faut créer un répertoire WEB-INF/resources/META-INF et y mettre <a href="files/week3/persistence.xml">ce fichier</a>.<br/>
-  Jettez-y un oeil et modifiez le selon vos besoins.
+  Jettez-y un oeil et modifiez le selon vos besoins.<br/>
+  Prétez notamment attention au paramètre "hbm2ddl.auto" et lisez cette page de <a href="http://stackoverflow.com/questions/438146/hibernate-hbm2ddl-auto-possible-values-and-what-they-do">stackOverflow</a>.
 </p>
 
 <p>
@@ -140,7 +196,8 @@ Vous pouvez aussi vous plonger dans la <a href="http://docs.oracle.com/javaee/7/
 
 <p>
   Reprenez le diagramme UML ci-dessous et implémentez le à l'aide d'annotation jpa.<br/>
-  L'ensemble des entitées seront situées dans le package "api.model".<br/>
+  L'ensemble des entitées seront situées dans le package <b>"api.model"</b>.<br/>
+  N'implémentez pas la persistance de "Reservation" et "Secteur" dans un premier temps.
   <!-- Vous trouverez dans <a href="files/week3/sources-week3.zip">cette archive</a> des classes vides à compléter. 
   Vous trouverez également un ensemble d'interfaces à implémenter plus tard.
   -->
@@ -150,10 +207,10 @@ Vous pouvez aussi vous plonger dans la <a href="http://docs.oracle.com/javaee/7/
   <img src="files/week3/DiagrammeCompet.png" align="center"/></a>
 
 <div class="note">
-  Télécharger la nouvelle version du "checker" <a href="http://eservices.webpulser.com/check.jar">ICI</a>. (version 1.2)<br/>
+  Télécharger la nouvelle version du "checker" <a href="http://eservices.webpulser.com/check.jar?v=1,5">ICI</a>.<br/>
   Commencer par installer ce jar dans votre repository maven :<br/>
   <code>
-  mvn install:install-file -Dfile=check.jar -DgroupId=fr.eservices -DartifactId=code-checker -Dversion=1.2 -Dpackaging=jar
+  mvn install:install-file -Dfile=check.jar -DgroupId=fr.eservices -DartifactId=code-checker -Dversion=1.5 -Dpackaging=jar
   </code>
   <br/>
   Ensuite, il faut tester avec tous les éléments du classpath géré par maven.<br/>
@@ -162,6 +219,7 @@ Vous pouvez aussi vous plonger dans la <a href="http://docs.oracle.com/javaee/7/
   mvn exec:java -Dexec.mainClass="tool.Check"  -Dexec.classpathScope=test -Dexec.args="check-jpa"
   </code>
   <br/>
+  Cela nécessitera évidemment d'avoir une dépendance vers "code-checker" dans votre pom.xml<br/>
 </div>  
 
 <h2>Etude de l'API de JPA</h2>
@@ -169,13 +227,26 @@ Vous pouvez aussi vous plonger dans la <a href="http://docs.oracle.com/javaee/7/
 <p>( <i style="color: #3333AA">autonomie</i> )</p>
 
 <p>
-  Etudiez l'interface de programmation de JPA.<br/>
+  Créer une classe de test afin de vérifier le bon comportement de votre modèle et de l'entityManager lors des opérations de persistance, recherche par clé, modification et suppression.<br/>
+  Essayer d'effectuer une recherche selon un critère portant sur un attribut d'une classe persister. Exemple : Tous les pilotes de plus de 50 ans.<br/>
+  Ou encore les vols de plus de 5h.
+</p>
+
+<p>
+  Les associations N-N de notre modèle portent des informations. Dans ce cas de figure, il est préférable d'utiliser deux liens OneToMany vers une classe qui portera ces informations.<br/>
+  Pour gérer l'association correctement, il y a ensuite deux stratégie concernant la clé primaire :<br/>
+  1. Réaliser une clé composée à l'aide de EmbeddedId ; (Voir <a href="http://www.mkyong.com/hibernate/hibernate-many-to-many-example-join-table-extra-column-annotation/">cette explication</a>)<br/>
+  2. Ajouter une simple clé (colonne supplémentaire) et mettre une contrainte d'unicité sur les colonnes des deux clé étrangères. ; (Voir <a href="http://stackoverflow.com/questions/5127129/mapping-many-to-many-association-table-with-extra-columns">cette explication</a>)<br/>
+  Essayez d'implémentez ces deux stratégies sur votre modèle, dans les Objets "Reservation" et "Secteur".
+</p>
+
+<p>
   Sans y passer trop de temps vous pouvez regarder l'<a href="https://github.com/gdufrene/java_ee_spring-13/tree/master/104_JPA">exercice d'initiation</a> proposé en 2013.
   Implémentez la partie JPA. Notez que cet exercice comporte des tests unitaires, c'est l'occasion de de voir comment cela fonctionne.<br/>
   Une fois fini, vous pouvez aussi comparer votre travail avec la correction.
 </p>
   
-<p>
+<!-- p>
   <u>Pour ce qui concerne le projet :</u><br/>
   Essayez d'implémenter les fonctionnalités des interfaces fournies dans api.features.<br/>
   Essayez de produire des écrans en JSP/Servlet pour permettre à un administrateur du site de modifier de manière "générique" l'ensemble des tables principales.<br/>
@@ -184,7 +255,7 @@ Vous pouvez aussi vous plonger dans la <a href="http://docs.oracle.com/javaee/7/
 <p>
   <i class="icon-star">★</i>
   Lorsque vous avez terminé ces cas d'usage, faîtes valider votre travail lors d'un TP encadré pour valider.<br/>
-</p>
+</p -->
 
 
 
@@ -196,7 +267,7 @@ Vous pouvez aussi vous plonger dans la <a href="http://docs.oracle.com/javaee/7/
     <a href="index.html"> <strong>^ Sommaire ^</strong> </a>
   </li>
   <li>
-    <a href="spring.html"> <strong>Spring &raquo; </strong> </a>
+    <!-- a href="spring.html"> <strong>Spring &raquo; </strong> </a -->
   </li>
 </ul>
 
