@@ -116,10 +116,10 @@
 </p>
 
 <div class="note">
-  Télécharger la nouvelle version du "checker" <a href="http://eservices.webpulser.com/check-1.3.jar">ICI</a>. (version 1.3)<br/>
+  Télécharger la nouvelle version du "checker" <a href="http://eservices.webpulser.com/check.jar?v=1,6">ICI</a>. (version 1.6)<br/>
   Installer ce jar dans votre repository maven :<br/>
   <code>
-  mvn install:install-file -Dfile=check-1.3.jar -DgroupId=fr.eservices -DartifactId=code-checker -Dversion=1.3 -Dpackaging=jar
+  mvn install:install-file -Dfile=check.jar -DgroupId=fr.eservices -DartifactId=code-checker -Dversion=1.6 -Dpackaging=jar
   </code>
   <br/>
   Enfin, pour testez votre projet, placez-vous à la racine du projet puis : <br/>
@@ -160,10 +160,10 @@
 (source : <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">documentation spring MVC</a>)
 </center>
 
-<h3> DAO de gestion des auteurs </h3>
+<h3> DAO de gestion d'une entité </h3>
 
 <p>
-  Nous allons implémenter une gestion des auteurs.<br/>
+  Nous allons implémenter un DAO avec spring.<br/>
   Commencez par télécharger <a href="files/week4/sources-week4.zip">cette archive</a> dans votre projet. <br/>
   Si ce n'est pas déjà fait, modifier votre pom pour configurer maven et compiler à niveau "1.8" de java.
   Il faudra ajouter ceci dans votre pom, à l'intérieur de la balise "build" : <br/>
@@ -201,7 +201,7 @@ Observez la classe "DaoTestConfig". La configuration de l'unité de persistance 
 
 <p style="padding: 0 100px">
   <img src="files/week4/test-dao.png" align="left" style="margin-right: 10px"/>
-  Lancez les tests dans eclipse, implémentez le code du "AuthorDaoJPA" jusqu'à ce que tous les tests passent.<br/>
+  Lancez les tests dans eclipse, implémentez le code du Dao Jpa jusqu'à ce que tous les tests passent.<br/>
   Cela vous demandera probablement de lire ou relire la documentation de l'Entity Manager et de la manière de construire des requêtes avec JPA. (voir page précédante).
 </p>
 
@@ -211,7 +211,7 @@ Observez la classe "DaoTestConfig". La configuration de l'unité de persistance 
   Comme vous pouvez le voir notre DAO et nos tests sont indépendant de l'environnement Web/Servlet.<br/>
 </p>
 
-<h3> Contrôleur de gestion des auteurs </h3>
+<h3> Contrôleur de gestion d'une entité </h3>
 
 <p>
  Ecrivons maintenant un contrôleur dont le rôle sera de valider quelques règles, et de faire le lien entre les appels à une servlet et notre DAO.</br>
@@ -219,22 +219,22 @@ Observez la classe "DaoTestConfig". La configuration de l'unité de persistance 
 </p>
 
 <p>
-  Ajouter une classe AuthorControl dans le package "impl".<br/>
-  Cette classe possèdera une propriété dao de type AuthorDao.<br/>
+  Ajouter une classe <b>Xxxx</b>Control dans le package "impl".<br/>
+  Cette classe possèdera une propriété dao de type <b>Xxxx</b>Dao.<br/>
   Ajouter une opération "list" qui prends un "org.springframework.ui.Model" en paramètre et renvoie un "String".<br/>
-  Cette opération appellera le dao pour récupérer la liste des auteurs et ajoutera cette liste au model.<br/>
-  L'opération renverra le nom d'une vue, par exemple "authors".<br/>
-  Avec l'aide de la <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">documentation</a>, annotez votre classe pour qu'elle soit utilisée par spring. L'opération list sera branchée sur l'URL "authors.html".
+  Cette opération appellera le dao pour récupérer la liste d'objets et ajoutera cette liste au model.<br/>
+  L'opération renverra le nom d'une vue, par exemple "<b>xxxxList</b>".<br/>
+  Avec l'aide de la <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html">documentation</a>, annotez votre classe pour qu'elle soit utilisée par spring. L'opération list sera branchée sur l'URL "<b>xxxx</b>List.html".
 </p>
 
 <p>
   Notez qu'il est aussi possible de tester ce modèle indépendamment du reste.<br/>
-  Il est même possible d'injecter un DAO factice dans notre contrôleur qui renverra toujours la même liste d'auteurs.
-  Ainsi, le test unitaire serait simplement de vérifier qu'après l'appel à la fonction "list" le modèle un attribut "authors" qui correspond à la liste des auteurs...<br/>
-  Ce scénario peut évidemment être beaucoup plus abouti si l'on veut vérifier que notre contrôleur respecte certaines règles "métiers" comme ne pas ajouter un auteur si son nom est null ou vide.
+  Il est même possible d'injecter un DAO factice dans notre contrôleur qui renverra toujours la même liste d'objets.
+  Ainsi, le test unitaire serait simplement de vérifier qu'après l'appel à la fonction "list" le modèle un attribut correctement nommé dans le model et correspondant à la liste de nos objets...<br/>
+  Ce scénario peut évidemment être beaucoup plus abouti si l'on veut vérifier que notre contrôleur respecte certaines règles "métiers" comme ne pas ajouter un objet si une propriété est null ou vide.
 <p>
 
-<h3> Vue liste des auteurs </h3>
+<h3> Vue liste des entités </h3>
 
 <p>
   Le contexte spring fourni est configuré pour résoudre les noms de vues par des JSP présentes à la racine du projet.<br/>
@@ -244,11 +244,11 @@ Observez la classe "DaoTestConfig". La configuration de l'unité de persistance 
 </p>
 
 <p>
-  Regardez et adaptez "authors.jsp" si besoin.
-  Le but est d'afficher dans un tableau HTML tous les auteurs.<br/>
-  Au dessus du tableau un lien amènera vers un formulaire permettant d'ajouter un auteur.<br/>
-  Au bout de chaque ligne un lien permettra de supprimer l'auteur après une confirmation (javascript).<br/>
-  Un lien permettra de modifier l'auteur, le lien sera posé soit sur le nom, soit sur un lien en fin de ligne.<br/>
+  Regardez et adaptez la jsp fournie si besoin.
+  Le but est d'afficher dans un tableau HTML toutes les entités d'un même type venant de notre source de données.<br/>
+  Au dessus du tableau un lien amènera vers un formulaire permettant d'ajouter une entité.<br/>
+  Au bout de chaque ligne un lien permettra de supprimer l'entité après une confirmation (javascript).<br/>
+  Un lien permettra de modifier l'entité, le lien sera posé soit sur le nom, soit sur un lien en fin de ligne.<br/>
   Le formulaire de modification peut être le même que celui de création. Trouvez un moyen de réutilisez ce formulaire.<br/>
 </p>
 
@@ -263,7 +263,7 @@ Observez la classe "DaoTestConfig". La configuration de l'unité de persistance 
 </p>
 
 <p>
-  Lancez maintenant tomcat et rendez-vous sur localhost:8080/tp1/authors.html
+  Lancez maintenant tomcat et rendez-vous sur localhost:8080/tp1/xxxxListe.html
 </p>
 
 <ul class="navigation">
@@ -274,7 +274,7 @@ Observez la classe "DaoTestConfig". La configuration de l'unité de persistance 
     <a href="index.html"> <strong>^ Sommaire ^</strong> </a>
   </li>
   <li>
-    <a href="jstl.html"> <strong>JSTL &raquo;</strong> </a>
+    <!-- a href="jstl.html"> <strong>JSTL &raquo;</strong> </a -->
   </li>
 </ul>
 
