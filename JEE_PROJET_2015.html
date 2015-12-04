@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>IFI - Projet JEE</title>
+  <link type="text/css" rel="stylesheet" href="https://stackedit.io/res-min/themes/blue.css" />
+<style>
+.content { width: 960px; margin: 0 auto; background-color: white; padding: 0 10px; }
+</style>
+</head>
+<body>
+  
+  <div class="content">
+    
+<p><img src="http://www.univ-lille1.fr/digitalAssets/38/38040_logo-trans.png" alt="Université Lille 1" title=""></p>
+
+<h1 id="ifi-projet-jee">IFI - Projet JEE</h1>
+
+<p><strong>Projet master e-services FA</strong></p>
+
+<p>
+  La Fédération Française de Vol à Voile compte environ 20000 pratiquants, dont une partie participe chaque année à des compétitions sportives. <br/>
+  Une compétition de planeur se déroule sur plusieurs jours durant lesquels des circuits sont proposés aux concurrents. La performance de chacun est évaluée en fonction du temps réalisé sur le circuit. Les concurrents obtiennent un score, généralement sur 1000 points, et proportionnel à la performance du plus rapide (celui-ci aura le maximum des points).<br/>
+  Le score de chacune des journées de vol est cumulé pour obtenir un score total. Le classement est établi en fonction de ce total.
+</p>
+
+<p>Notre objectif est de réaliser une application permettant de simplifier la gestion des inscriptions à une compétition.
+  Cette application sera également utile pour définir les épreuves de chaque journée de vol et de suivre les classements journaliers ou le général.<br/>
+  Une autre partie de l'application permettra de suivre les frais dus par chaque participants. Ces frais comprennent les frais d'inscriptions, les prix des repas auquels il aurait participé, le coût de chaque mise en l'air, la participation au frais de camping, ou encore la note de bar.<br/>
+</p>
+
+<p>Notre application prendra la forme d’un site internet sur lequel les membres viendront s’inscrire.</p>
+
+<h2 id="liste-des-fonctionnalités"><i class="icon-list"></i> Liste des fonctionnalités.</h2>
+
+<p><i class="icon-tag"></i> <em>En tant que sportif, je souhaite m’inscrire sur le site afin de participer à la compétition.</em></p>
+
+<p>Pour s’inscrire un membre devra renseigner obligatoirement son nom, prénom, email, date de naissance.<br>
+  Les membres déclareront leur affiliation à l’une des associations. <br>
+  L'inscription se fait en saisissant toutes les informations nécessaires à la participation. (voir formulaire exemple)<br>
+  Une fois inscrit, le membre recevra un mail de confirmation. Après inscription le pilote est redevable des frais d'inscription<br>
+
+On supposera que les clubs sont déjà renseignés dans la base de données (par exemple par un import de la liste d’une fédération). <br>
+Lorsqu’un membre s’inscrit, sa demande est soumise à validation, on l’invite à attendre confirmation de cette inscription.</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux revoir le détail d'un formulaire d'inscription et en modifier les informations si nécessaire. Je peux surtout valider la demande d'inscription d'un pilote.</em></p>
+
+<p>Une liste me présente tous les pilotes inscrits. Je peux filtrer cette liste par status et ne voir que les membres non validés. Je peux ouvrir la fiche d'inscription d'un membre et en modifier les informations. Je peux passer le status de son inscription à "validé".</p>
+
+<p><i class="icon-tag"></i> <em>En tant que sportif, je peux voir la liste des pilotes inscrits à la compétition.</em></p>
+
+<p>La liste présentera le prénom, nom, club, type de planeur</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux définir des points de passage afin de les utiliser ensuite dans la définition des circuits.</em></p>
+
+<p>Un point de passage est défini par un numéro séquentiel, un nom, sa latitude, sa longitude, son type (point, aérodrome, aérodrome privé, aéroport restreint).
+  On pourra également lui mettre une description. Idéalement le positionnement du point (latitude et longitude) pourra se faire en cliquant sur une google map.
+</p>
+
+
+<p><i class="icon-tag"></i> <em>En tant que sportif je peux visualiser la liste des point de virage.</em></p>
+
+<p>Une liste non paginée, affichant tous les points définis pour la compétition et qui pourront être utilisé dans un circuit.
+  Idéalement, en plus de la vue liste affichant le nom, latitude et longitude : <br/>
+  - je peux voir la description d'un point en cliquant sur le nom ;
+  - je peux voir l'ensemble des points présenté sur une google map, je peux voir le nom du point en cliquant sur un des repères positionné sur la google map.
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant que sportif je peux télécharger la liste des points de virage au format CUP ou DAT afin de m'aider dans la navigation.</em></p>
+
+<p>Il s'agit de deux formats de fichiers utilisables par des logiciels de navigations ou des GPS.
+  (voir fichier exemple DAT) / (voir fichier exemple CUP)
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux définir une épreuve pour une journée de vol.</em></p>
+
+<p>
+  Il n'y a qu'une seule épreuve par jour réalisée en compétition.<br/>
+  l'épreuve peut être évaluée en zone ou selon des points (AAT / AST). <br/>
+  Une épreuve est constitué d'une succession de point de passage.<br/>
+  Le tout formera une distance à parcourir.<br/>
+  Les points de passages sont issues de la liste officielles diffusée avant la compétition.<br/>
+  Il y a un départ : le premier point, et une arrivée : le dernier point.<br/>
+  Tous les points se définissent avec une distance nommée rayon.<br/>
+  Le départ peut être une ligne à franchir dans le sens du 2ème point, ou un cercle qu'il faudra quitter.<br/>
+  L'arriver sera également, soit une ligne, soit un cercle dans lequel il faudra rentrer.<br/>
+  Dans le cas d'une ligne le rayon est donc la moitié de la longueur totale de la ligne, centrée sur le point de passage et orienté perpendiculairement au segment entre le point de départ et le 2ème point.<br/>
+  Dans le cas d'un cercle le rayon est par définition la distance entre le point et le tour du cercle.<br/>
+  Entre le départ et l'arrivée les organisateurs pourront venir placer autant de points qu'ils le souhaitent, généralement entre 3 et 6.<br/>
+  Sur les épreuves AAT, chaque point de passage est un cercle centré sur le point de passage et de taille variable, exprimée avec le rayon de ce point de passage. Dans les épreuves AAT, un temps de circuit minimum est également imposé.<br/>
+  Sur les épreuves AST, les secteurs de passages sont constitués d'un cercle de 500m de rayon et d'un quart de cercle (cadran de 90°) orienté de manière opposée à la bissectrice du segment précédant et du segment suivant.<br/>
+  L'organisateur aura à sa disposition un champ de commentaire qu'il pourra compléter.<br/>
+  <br/>
+  Idéalement, bien qu'il n'y a qu'une seule épreuve de lancer. L'organisateur aimerait en prévoir 2 (une principale, et une de secours), qu'il pourra librement choisir avant le début de l'épreuve en fonction de l'évolution des conditions météo.<br/>
+  Idéalement vous calculerez automatiquement la distance totale du circuit (la somme des distances entre les points).<br/>
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur j'aimerai générer une représentation graphique d'une épreuve afin de mieux visualiser le parcours.</em></p>
+
+<p>
+  Générer une image représentant le circuit avec le départ, sous forme de ligne ou de cercle.<br/>
+  Représenter les points de passage avec le secteur de passage : un cercle, ou cercle + cadran.<br/>
+  Représenter la ligne d'arriver ou le cercle d'arrivé.<br/>
+  L'objectif est de générer une image (png ou jpg) sur fond blanc, avec les points et secteurs, comme s'ils étaient projetés sur une carte.<br/>
+  Vous pouvez dans un premier temps faire une projection linéaire (1° de latitude = 1° de longitude = x pixels).<br/>
+  Idéalement, Vous ferait ensuite une projection de Mercator, régulièrement utilisé pour représenter un planisphère.
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant que concurrent je peux consulter la liste des épreuves afin de préparer ma navigation.</em></p>
+
+<p>
+  Toutes les informations du circuit définies par l'organisateur y figureront, notamment :<br/>
+  Le jour de l'épreuve.<br/>
+  Le type d'épreuve, si besoin la durée de l'épreuve.<br/>
+  Le numéro, le nom, les coordonnées géographiques de chaque point de passage.<br/>
+  L'image générée du circuit.<br/>
+  Les commentaires de l'organisateur.<br/>
+  Idéalement, cette fiche d'épreuve pourra être éditée en PDF et tiendra sur un A4, portrait ou paysage.<br/>
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux enregistrer le fichier de vol de chacun des concurrents concernant une épreuve.</em></p>
+
+<p>
+  Il s'agit d'un fichier au format "IGC" issu d'un enregistreur de vol tel que celui que vous avez analysé en TP1.<br/>
+  Les informations suivantes seront automatiquement extraites du fichier de vol :<br/>
+  l'heure de décollage / l'heure d'atterrissage ... et donc la durée du vol.<br/>
+  <br/>
+  Une liste me présentera l'ensemble des concurrents pour une épreuve.<br/> 
+  Pour ceux dont j'ai saisi le vol, je peux télécharger le fichier IGC.<br/>
+  Je peux facilement identifier les vols qui n'ont pas encore été saisi.
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux visualiser le fichier de vol de chacun des concurrents concernant une épreuve.</em></p>
+
+<p>
+  L'objectif est de tracer le circuit en lisant l'enregistrement de vol et de générer une image sur fond blanc de ce tracé (jpg ou png).<br/>
+  L'enregistrement de vol est une succession de position enregistrée toutes les 4 à 10 secondes.<br/>
+  Si vous tracez des lignes entre les points successifs du fichier de vol vous devriez obtenir le tracé souhaité.<br/>
+  Idéalement vous ferez une projection de Mercator du tracé.<br/>
+  Idéalement il sera possible de superposer le circuit et le tracé.<br/>
+</p>
+
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux évaluer manuellement l'épreuve d'un concurrent.</em></p>
+
+<p>
+  Pour une AST cela consiste simplement à saisir l'heure de franchissement du départ et l'heure de franchissement de l'arrivée.<br/>
+  Vous calculerez la vitesse moyenne du pilote en fonction de la distance du circuit et du temps réalisé par le concurrent.<br/>
+  Il est possible qu'un candidat ne termine pas l'épreuve. Dans ce cas on ne saisi par l'heure d'arrivé et on ne calcul par sa moyenne.<br/>
+  Il est par contre utile de saisir la distance qu'il a parcouru dans ce cas.<br/>
+  <br/>
+  Pour une AAT cela consiste en la saisie de la distance et du temps réalisé. La distance réalisée est la plus grande distance mesurable en choisissant un point par zone et enregistré dans le vol, de tel sorte que les segments entre le départs, ces points et l'arrivée soit maximisé.<br/> 
+  La durée est le temps de parcours entre le départ et l'arrivée.<br/>
+  Vous calculerez la vitesse moyenne de telle sorte que le temps de parcours sera minimisé par la durée imposée de l'épreuve.<br/>
+  <br/>
+  Une liste me présentera le classement des pilotes par performance décroissante. Les pilotes pour lesquels une évaluation n'a pas encore été saisi seront mis en évidence.
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux évaluer automatiquement l'épreuve d'un concurrent.</em></p>
+
+<p>
+  Il s'agira de réaliser une fonction prenant en entrée : la définition d'une épreuve et le fichier de vol (son emplacement sur le serveur).<br/>
+  Cette fonction doit renvoyer une vitesse moyenne évaluée.<br/>
+  Si l'évaluation d'une épreuve AST est relativement simple, celle d'une AAT sera bien plus complexe (et plus consommatrice de CPU !)<br/>
+  Idéalement intégrer votre travail dans la saisie de performance, afin de pouvoir calculer automatiquement la performance du pilote.<br/>
+  L'utilisation du mode d'évaluation automatique doit resté facultatif (appuie sur un bouton par exemple).<br/>
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux mettre à jour les scores d'une épreuve afin d'établir le classement.</em></p>
+
+<p>
+  Lorsque je le souhaite, je peux lancer le calcul des points d'une épreuve.<br/>
+  Le score d'un concurrent est évalué proportionnellement à la meilleure performance.<br/>
+  Si j'ai la meilleure performance, j'obtiens le meilleur score.<br/>
+  Dans un premier temps et pour simplifier 0 à 500 points sont accordés si le concurrent arrive à faire le circuit,<br/>
+  Si il fait moins de kms que prévu, il a un nombre de point proportionnel entre la taille du circuit et sa distance réalisée.<br/>
+  Les 500 points suivants sont accordés en fonction de la vitesse réalisée, si le pilote boucle le circuit.<br/>
+  Les points obtenus sont proportionnel, entre la vitesse la plus lente et la vitesse du meilleur.<br/>
+  <br/>
+  Idéalement, les scores seront calculés selon les véritables règles des compétitions fédérales ...<br/>
+  Voir ce <a href="http://ffvv.org/files/2015/01/np41-reglementcompetitions-edition2015-v100.pdf">règlement des compétition</a>, article 14 Annexe A 1 - Mesure de la performance :: Bonne Chance !
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant que concurrent je peux consulter les classements afin d'estimer mon niveau.</em></p>
+
+<p>
+  Présenter les classements par épreuve, et le classement général.<br/>
+  Le classement par épreuve est la liste triée de manière décroissante par score d'épreuve.<br/>
+  Le classement général est la liste triée selon la somme des scores sur toutes les épreuves.<br/>
+</p>
+
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux organiser des repas.</em></p>
+
+<p>
+  Les repas sont soit le midi, soit le soir. Ils sont tous daté et unique.<br/>
+  Je saisi un menu et un prix pour chaque repas.<br/>
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant que concurrent je peux m'inscrire à des repas.</em></p>
+
+<p>
+  Lors de l'inscription j'indique le nombre de repas que je réserve.<br/>
+  Je confirme mon inscription et je suis alors redevable du montant de ce/ces repas sur mon compte pilote.<br/>
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux définir des "produits" à la vente.</em></p>
+
+<p>
+  Un produit seront ranger dans différentes catégories, non hiérarchique.<br/>
+  Les produits auront un cout unitaire, une description.<br/>
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant qu'organisateur je peux définir l'achat de produits pour un concurrents.</em></p>
+
+<p>
+  L'organisateur sélectionnera le concurrent à débiter, par exemple via un menu déroulant.<br/>
+  Une liste de produit apparait, je peux la filtrer par catégorie,<br/>
+  Je peux ensuite définir la quantité achetée, par défaut à 1.<br/>
+  Je peux également, au moment de l'achat, modifier le montant pour cet achat précisément.<br/>
+  Je peux aussi débiter le compte pilote d'un concurrent de manière arbitraire, en choisissant librement le libellé et le montant du débit, ou du crédit.<br/>
+  Afin d'assurer une bonne vérification des comptes et éviter toute erreur, la colonne des crédits et des débits sera bien distinguée.<br/>
+  Ainsi, lorsque je saisi un montant il est nécessairement positif, dans les débits ou crédits.<br/>
+  Je pourrai également visualiser, modifier ou supprimer toutes les opérations déjà définies.<br/>
+</p>
+
+<p><i class="icon-tag"></i> <em>En tant que concurrent je peux voir mon compte pilote.</em></p>
+
+<p>
+  Le compte pilote est la liste des débits/crédits générés par l'activité de la compétition, saisis par l'organisateur.
+</p>
+
+
+
+<h2 id="livrable"><i class="icon-login"></i> Livrable.</h2>
+
+<p><i class="icon-user"></i> Le projet est a réalisé par groupe de 3.  <br>
+<i class="icon-calendar"></i> Il est à rendre pour le 18 DECEMBRE 2015 AVANT 22h00. <br>
+Vous en ferez une présentation de 15 minutes en groupe ce même jour au matin.<br/>
+<i class="icon-folder-open"></i> Partagez-moi un projet bitbucket nommé "JEE-P2015-<b>NUMERO_GROUPE</b>" contenant les sources d’un projet maven et vos ressources web (vues, images, styles, scripts …)</p>
+
+<p>Les dépendances mavens ne seront pas comité, elles doivent pouvoir être récupérées en utilisant “mvn compile”. <br>
+Votre projet utilisera spring, sera organisé selon un pattern MVC mettant en oeuvre des vues en JSP ou JSTL. <br>
+Les contrôleurs seront configurés à l’aide des annotations spring vues en cours/tp cette année. <br>
+Les informations seront persistées à travers des objets définis avec les annotation JPA dans une base de données relationnelles. <br>
+Au choix : MySQL, postgres ou H2 database. <br>
+Dans tous les cas des indications claires seront données pour initialiser la base de données si nécessaire. <br>
+Votre archive doit pouvoir être utilisée comme une application compatible JEE dans tomcat 8.</p>
+
+<p>Votre application devrait pouvoir se lancer en faisant :</p>
+
+<ul>
+<li>un 'git clone' de votre projet dans le répertoire “webapp”, </li>
+<li>une compilation ,</li>
+<li>initialiser la base de données si nécessaire (par exemple à l’aide d’un script SQL) ,</li>
+<li>une copie éventuelle des dépendances dans WEB-INF/lib (à documenter) ,</li>
+<li>lancer Tomcat 8</li>
+</ul>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+$(function() {
+  $("i.icon-tag").each( function(i) {
+    $(this).after( $("<b>(( #"+(i+1)+" ))</b>") );
+  });
+});
+</script>
+
+
+</body>
+</html>
