@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>IFI - Projet JEE</title>
+  <link type="text/css" rel="stylesheet" href="https://stackedit.io/res-min/themes/blue.css" />
+<style>
+.content { width: 960px; margin: 0 auto; background-color: white; padding: 0 10px; }
+</style>
+</head>
+<body>
+  
+  <div class="content">
+    
+<p><img src="http://www.univ-lille1.fr/digitalAssets/38/38040_logo-trans.png" alt="Université Lille 1" title=""></p>
+
+<h1 id="ifi-projet-jee">IFI - Projet JEE</h1>
+
+<p><strong>Session de rattrapage master e-services FA</strong></p>
+
+<p>
+  Il existe des milliers d'entreprises en France, et des millions de salariés qui prennent chaque année 5 semaines de congés payés.
+</p>
+
+<p>
+  Les demandes de congés ou d'absence sont régulièrement une source de difficulté dans la gestion du personnel.<br>
+  L'objectif est de créer une application permettant de gérer les demandes et la validation des congés tout en contrôlant les "droits" à congés.<br>
+</p>
+
+
+<h2 id="liste-des-fonctionnalités"><i class="icon-list"></i> Liste des fonctionnalités.</h2>
+
+
+<p><i class="icon-tag"></i> 
+  <em>En tant que manager, 
+    je souhaite créer/modifier des employés dans le système.</em>
+</p>
+<p>
+  Je m'identifie avec un login et mot de passe connu (configuration ou en BDD).<br/>
+  Une liste présente les employés existant, je peux modifier un employé existant, ou en ajouter un.<br/>
+  Je peux saisir le nom, prénom, mail, date d'entrée dans l'entreprise.<br/>
+  L'employé est alors créé avec un status "nouveau" (il pourra initialiser son mot de passe ensuite ...).
+</p>
+
+<p><i class="icon-tag"></i> 
+  <em>En tant que nouvel employé,
+    je peux initialiser mon mot de passe.</em>
+</p>
+<p>Une page demande le mail de l'utilisateur. Si cet utilisateur est en status "nouveau" on lui demandera d'initialiser son mot de passe.
+  Il passera alors en status "actif".<br/>
+  Si l'utilisateur est "actif" on lui demande son mot de passe et on le compare à celui en BDD.<br/>
+  Les mots de passe ne doivent pas apparaitre en clair dans la BDD.<br/>
+  
+</p>
+
+<p><i class="icon-tag"></i> 
+  <em>En tant qu'employé,
+    je peux faire une demande de congés.</em>
+</p>
+<p>
+  Je saisi une date de début d'absence (le premier jour ou j'aurai du travailler) et une date de fin d'absence (le dernier jour ou j'aurai du travailler).
+  La demande de congé est alors en état "à valider".
+</p>
+
+<p><i class="icon-tag"></i> 
+  <em>En tant que manager, 
+    je peux valider ou refuser une demande.</em>
+</p>
+<p>
+  Une page me présente la liste des demandes de congés à valider, triées par date de début de congés.<br/>
+  Je peux valider ou refuser une demande.<br/>
+</p>
+
+<p><i class="icon-tag"></i> 
+  <em>En tant qu'employé,
+    je peux visualiser les demandes effectuées par d'autres, en attente de validation ou validées.</em>
+</p>
+<p>
+  Une page me présente la liste des demandes de congés validées ou en attente de validation.<br/>
+  Cette page ne présente que les demandes dont la date de fin sera supérieure à la date du jour.<br/>
+  Vous proposerez une manière de tester cette dernière fonctionnalité et me permettre de vérifier que si j'étais au mois de septembre 2016 je ne verrai pas les demande de juin 2016 (par exemple).
+</p>
+
+<p><i class="icon-tag"></i> 
+  <em>En tant qu'employé,
+    je peux consulter le solde de mes congés en cours d'acquisition, acquis, consommé et le solde.</em>
+</p>
+<p>
+  Chaque employé a 4 compteurs concernant ses congés :<br>
+    - en cours d'acquisition <br/>
+    - acquis <br/>
+    - consommé <br/>
+    - solde<br/>
+</p>
+
+<p><i class="icon-tag"></i> 
+  <em>Chaque début de mois,
+    le système mettra à jour les "compteurs" de chaque employé en fonction du mois écoulé.</em>
+</p>
+<p>
+  Cette fonction se présentera sous la forme d'un appel WS (rest/json).<br/>
+  Cette fonction prendra en paramètre une date et effectuera le calcul entre le dernier mois traité et la date passée en paramètre.<br/>
+  Proposez une solution qui permette d'appeler plusieurs fois cette fonction avec le même paramètre sans que cela ne perturbe les calculs.<br/>
+  Votre fonction doit également permettre de traiter plusieurs mois d'un coup.<br/>
+  <br/>
+  * en cours d'acquisition : ce compteur augmente de 2,03 chaque mois<br/>
+  * acquis : ce compteur augmente chaque année, au mois de mai, de la valeur du compteur "en cours d'acquisition"<br/>
+  * consommé : ce compteur augmente chaque mois du nombre de jour de congés réellement pris le mois précédant<br/>
+  * solde : ce compteur est égal à acquis - consommé<br/>
+</p>
+
+
+<h2 id="livrable"><i class="icon-login"></i> Livrable.</h2>
+
+<p><i class="icon-user"></i> Le projet est individuel.  <br>
+<i class="icon-calendar"></i> Il est à rendre pour le 12 JUIN 2015 AVANT 22h00. <br>
+<i class="icon-folder-open"></i> Partagez-moi un projet bitbucket nommé "JEE-PJ2-<b>VOTRE_NOM</b>" contenant les sources d’un projet maven et vos ressources web (vues, images, styles, scripts …)</p>
+
+<p>Les dépendances maven ne seront pas fournies, elles doivent pouvoir être récupérées en utilisant “mvn compile”. <br>
+Votre projet utilisera spring, sera organisé selon un pattern MVC mettant en oeuvre des vues en JSP. <br>
+Les contrôleurs seront configurés à l’aide des annotations spring vues en cours/tp cette année. <br>
+Les informations seront persistées à travers des objets définis avec les annotation JPA dans une base de données relationnelles. <br>
+Au choix : MySQL, postgres ou H2 database. <br>
+Dans tous les cas des indications claires seront données pour initialiser la base de données si nécessaire. <br>
+Votre archive doit pouvoir être utilisée comme une application compatible JEE dans tomcat 8 : il doit être possible de construire un war et de le déployer sans utiliser un IDE quelconque.</p>
+
+<p>Votre application devrait pouvoir se lancer en faisant :</p>
+
+<ul>
+<li>un 'git clone' de votre projet dans le répertoire “webapp”, </li>
+<li>une compilation ,</li>
+<li>initialiser la base de données si nécessaire (par exemple à l’aide d’un script SQL) ,</li>
+<li>une copie éventuelle des dépendances dans WEB-INF/lib (à documenter) ,</li>
+<li>lancer Tomcat 8</li>
+</ul>
+</div>
+</body>
+</html>
